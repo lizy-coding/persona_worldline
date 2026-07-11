@@ -1,11 +1,11 @@
 {
-    "name": "persona_worldline",
-    "short_name": "persona_worldline",
+    "name": "人格世界线",
+    "short_name": "世界线",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0c1020",
+    "theme_color": "#0c1020",
+    "description": "原创宇宙危机人格世界线互动游戏。",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

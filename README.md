@@ -56,6 +56,20 @@ flutter analyze
 flutter test
 ```
 
+## 一键发布到 GitHub Pages
+
+项目包含 `.github/workflows/deploy-pages.yml`：推送 `master` 时自动校验并发布，
+也可在 GitHub Actions 页面通过 `Run workflow` 手动发布。首次使用需在仓库
+`Settings → Pages` 中将 Source 设置为 `GitHub Actions`。
+
+预期访问地址：
+
+```text
+https://lizy-coding.github.io/persona_worldline/
+```
+
+完整说明见 [GitHub Pages 发布指南](docs/DEPLOY_GITHUB_PAGES.md)。
+
 ## 项目结构
 
 ```text
