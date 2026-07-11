@@ -1,5 +1,12 @@
 {
-  "schemaVersion": 1, "packId": "silent-tide", "version": "1.0.0", "title": "星海抉择", "startEventId": "signal",
+  "schemaVersion": 1, "packId": "silent-tide", "version": "1.1.0", "title": "星海抉择",
+  "summary": "一次宇宙文明危机中的人格世界线实验。",
+  "intro": {
+    "title": "序章：静默潮汐",
+    "body": "纪元 2371 年，一场被称为“静默潮汐”的异常正吞没星际通讯。你是联合航路议会的临时决策官。三个殖民地、未知文明的信号，以及一艘载满冬眠者的方舟，都将在接下来的数分钟里等待你的选择。\n\n没有完美答案。每次决定都会把你推向一条不同的世界线。",
+    "buttonText": "进入决策室"
+  },
+  "expectedTaskCount": 7, "startEventId": "signal",
   "dimensions": ["文明责任", "理性决策", "风险偏好", "道德边界", "威慑倾向"],
   "archetypes": [
     {"id":"guardian","name":"群星守望者","description":"你把文明共同体置于个人得失之上，愿意承担守护的代价。","weights":{"文明责任":5,"理性决策":2,"风险偏好":0,"道德边界":4,"威慑倾向":-2}},

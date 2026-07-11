@@ -122,12 +122,45 @@ class Ending {
       Ending(j['id'] as String, j['title'] as String, j['summary'] as String);
 }
 
+class StoryIntro {
+  const StoryIntro({
+    required this.title,
+    required this.body,
+    required this.buttonText,
+  });
+  final String title;
+  final String body;
+  final String buttonText;
+
+  factory StoryIntro.fromJson(Json j) => StoryIntro(
+    title: j['title'] as String,
+    body: j['body'] as String,
+    buttonText: j['buttonText'] as String,
+  );
+}
+
+class StoryDescriptor {
+  const StoryDescriptor({
+    required this.packId,
+    required this.title,
+    required this.summary,
+    required this.audienceTags,
+  });
+  final String packId;
+  final String title;
+  final String summary;
+  final List<String> audienceTags;
+}
+
 class GameContentPack {
   const GameContentPack({
     required this.schemaVersion,
     required this.packId,
     required this.version,
     required this.title,
+    required this.summary,
+    required this.intro,
+    required this.expectedTaskCount,
     required this.startEventId,
     required this.dimensions,
     required this.archetypes,
@@ -135,7 +168,9 @@ class GameContentPack {
     required this.endings,
   });
   final int schemaVersion;
-  final String packId, version, title, startEventId;
+  final String packId, version, title, summary, startEventId;
+  final StoryIntro intro;
+  final int expectedTaskCount;
   final List<String> dimensions;
   final List<Archetype> archetypes;
   final Map<String, GameEvent> events;
@@ -149,6 +184,9 @@ class GameContentPack {
       packId: j['packId'] as String,
       version: j['version'] as String,
       title: j['title'] as String,
+      summary: j['summary'] as String,
+      intro: StoryIntro.fromJson(j['intro'] as Json),
+      expectedTaskCount: j['expectedTaskCount'] as int,
       startEventId: j['startEventId'] as String,
       dimensions: List<String>.from(j['dimensions'] as List),
       archetypes: _list(j['archetypes'], Archetype.fromJson),
@@ -175,6 +213,9 @@ class GameContentPack {
       throw const FormatException('ID 必须全局唯一');
     }
     for (final event in events.values) {
+      if (event.actions.isEmpty) {
+        throw FormatException('事件没有出口: ${event.id}');
+      }
       for (final action in event.actions.cast<SelectOptionAction>()) {
         final destinations = [
           action.nextEventId,
@@ -191,6 +232,43 @@ class GameContentPack {
           throw FormatException('无效 endingId: ${action.endingId}');
         }
       }
+    }
+    _validateGraph();
+  }
+
+  void _validateGraph() {
+    final reachable = <String>{};
+    void visit(String eventId) {
+      if (!reachable.add(eventId)) return;
+      for (final action
+          in events[eventId]!.actions.cast<SelectOptionAction>()) {
+        if (action.nextEventId != null) visit(action.nextEventId!);
+      }
+    }
+
+    visit(startEventId);
+    final unreachable = events.keys.where((id) => !reachable.contains(id));
+    if (unreachable.isNotEmpty) {
+      throw FormatException('存在不可达事件: ${unreachable.join(', ')}');
+    }
+
+    final resolving = <String>{};
+    final resolved = <String>{};
+    bool canReachEnding(String eventId) {
+      if (resolved.contains(eventId)) return true;
+      if (!resolving.add(eventId)) return false;
+      final result = events[eventId]!.actions.cast<SelectOptionAction>().any(
+        (action) =>
+            action.endingId != null || canReachEnding(action.nextEventId!),
+      );
+      resolving.remove(eventId);
+      if (result) resolved.add(eventId);
+      return result;
+    }
+
+    final trapped = events.keys.where((id) => !canReachEnding(id));
+    if (trapped.isNotEmpty) {
+      throw FormatException('事件无法抵达结局: ${trapped.join(', ')}');
     }
   }
 }

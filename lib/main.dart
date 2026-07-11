@@ -1,26 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'game/engine.dart';
+import 'game/infrastructure.dart';
+import 'game/models.dart';
 import 'game/session.dart';
+import 'story_catalog.dart';
 
 final repositoryProvider = Provider<SaveRepository>(
   (ref) => LocalSaveRepository(),
+);
+final contentRepositoryProvider = Provider<ContentPackRepository>(
+  (ref) => const AssetContentPackRepository({
+    'silent-tide': 'assets/content/core_pack.json',
+  }),
 );
 final gameProvider = AsyncNotifierProvider<GameNotifier, GameSession?>(
   GameNotifier.new,
 );
 
 class GameNotifier extends AsyncNotifier<GameSession?> {
-  late GameController controller;
+  late GameCoordinator coordinator;
   @override
   Future<GameSession?> build() async {
-    controller = GameController(ref.read(repositoryProvider));
-    return controller.initialize(await const ContentPackLoader().load());
+    coordinator = GameCoordinator(
+      stories: builtInStories,
+      contentRepository: ref.read(contentRepositoryProvider),
+      saveRepository: ref.read(repositoryProvider),
+    );
+    return null;
   }
 
-  Future<void> newGame() async => state = AsyncData(await controller.newGame());
+  Future<void> selectStory(String packId) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => coordinator.selectStory(packId));
+  }
+
+  Future<void> newGame() async =>
+      state = AsyncData(await coordinator.newGame());
   Future<void> choose(String id) async =>
-      state = await AsyncValue.guard(() => controller.choose(id));
+      state = await AsyncValue.guard(() => coordinator.choose(id));
+
+  void leaveStory() => state = const AsyncData(null);
 }
 
 void main() => runApp(const ProviderScope(child: WorldlineApp()));
@@ -30,7 +50,7 @@ class WorldlineApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: '星海抉择',
+    title: '人格世界线',
     theme: ThemeData(
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xff4157a5),
@@ -43,7 +63,7 @@ class WorldlineApp extends StatelessWidget {
   );
 }
 
-enum Screen { home, intro, game }
+enum Screen { library, home, intro, game }
 
 class GameShell extends ConsumerStatefulWidget {
   const GameShell({super.key});
@@ -52,7 +72,7 @@ class GameShell extends ConsumerStatefulWidget {
 }
 
 class _GameShellState extends ConsumerState<GameShell> {
-  Screen screen = Screen.home;
+  Screen screen = Screen.library;
   @override
   Widget build(BuildContext context) => Scaffold(
     body: SafeArea(
@@ -70,7 +90,7 @@ class _GameShellState extends ConsumerState<GameShell> {
                     message: '内容加载失败\n$e',
                     retry: () => ref.invalidate(gameProvider),
                   ),
-                  data: (session) => _content(session!),
+                  data: _content,
                 ),
           ),
         ),
@@ -78,7 +98,18 @@ class _GameShellState extends ConsumerState<GameShell> {
     ),
   );
 
-  Widget _content(GameSession session) {
+  Widget _content(GameSession? session) {
+    if (session == null || screen == Screen.library) {
+      return StoryLibraryPage(
+        stories: builtInStories,
+        onSelect: (packId) async {
+          await ref.read(gameProvider.notifier).selectStory(packId);
+          if (mounted && ref.read(gameProvider).hasValue) {
+            setState(() => screen = Screen.home);
+          }
+        },
+      );
+    }
     if (screen == Screen.home) {
       return HomePage(
         session: session,
@@ -89,10 +120,15 @@ class _GameShellState extends ConsumerState<GameShell> {
         onContinue: session.state != null && !session.state!.completed
             ? () => setState(() => screen = Screen.game)
             : null,
+        onChangeStory: () {
+          ref.read(gameProvider.notifier).leaveStory();
+          setState(() => screen = Screen.library);
+        },
       );
     }
     if (screen == Screen.intro) {
       return IntroPage(
+        session: session,
         onContinue: () => setState(() => screen = Screen.game),
         onBack: () => setState(() => screen = Screen.home),
       );
@@ -115,21 +151,81 @@ class _GameShellState extends ConsumerState<GameShell> {
   }
 }
 
+class StoryLibraryPage extends StatelessWidget {
+  const StoryLibraryPage({
+    super.key,
+    required this.stories,
+    required this.onSelect,
+  });
+  final List<StoryDescriptor> stories;
+  final Future<void> Function(String) onSelect;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      const SizedBox(height: 24),
+      Text('选择一条世界线', style: Theme.of(context).textTheme.headlineMedium),
+      const SizedBox(height: 8),
+      const Text('每条故事线拥有独立内容、人格规则和本地进度。'),
+      const SizedBox(height: 24),
+      for (final story in stories)
+        Card(
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => onSelect(story.packId),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    story.title,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(story.summary),
+                  const SizedBox(height: 14),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: story.audienceTags
+                        .map((tag) => Chip(label: Text(tag)))
+                        .toList(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+    ],
+  );
+}
+
 class HomePage extends StatelessWidget {
   const HomePage({
     super.key,
     required this.session,
     required this.onStart,
+    required this.onChangeStory,
     this.onContinue,
   });
   final GameSession session;
   final VoidCallback onStart;
+  final VoidCallback onChangeStory;
   final VoidCallback? onContinue;
   @override
   Widget build(BuildContext context) => Column(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.stretch,
     children: [
+      TextButton.icon(
+        onPressed: onChangeStory,
+        icon: const Icon(Icons.grid_view_outlined),
+        label: const Text('切换故事线'),
+        style: TextButton.styleFrom(alignment: Alignment.centerLeft),
+      ),
+      const Spacer(),
       Icon(
         Icons.public,
         size: 72,
@@ -142,10 +238,7 @@ class HomePage extends StatelessWidget {
         style: Theme.of(context).textTheme.displaySmall,
       ),
       const SizedBox(height: 12),
-      const Text(
-        '一次宇宙文明危机中的人格世界线实验\n约 3–5 分钟 · 离线可玩',
-        textAlign: TextAlign.center,
-      ),
+      Text(session.pack.summary, textAlign: TextAlign.center),
       const SizedBox(height: 40),
       if (onContinue != null) ...[
         FilledButton.icon(
@@ -159,12 +252,19 @@ class HomePage extends StatelessWidget {
         onPressed: onStart,
         child: Text(onContinue == null ? '开始游戏' : '重新开始'),
       ),
+      const Spacer(),
     ],
   );
 }
 
 class IntroPage extends StatelessWidget {
-  const IntroPage({super.key, required this.onContinue, required this.onBack});
+  const IntroPage({
+    super.key,
+    required this.session,
+    required this.onContinue,
+    required this.onBack,
+  });
+  final GameSession session;
   final VoidCallback onContinue, onBack;
   @override
   Widget build(BuildContext context) => Column(
@@ -177,14 +277,20 @@ class IntroPage extends StatelessWidget {
         style: TextButton.styleFrom(alignment: Alignment.centerLeft),
       ),
       const Spacer(),
-      Text('序章：静默潮汐', style: Theme.of(context).textTheme.headlineMedium),
+      Text(
+        session.pack.intro.title,
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
       const SizedBox(height: 20),
-      const Text(
-        '纪元 2371 年，一场被称为“静默潮汐”的异常正吞没星际通讯。你是联合航路议会的临时决策官。三个殖民地、未知文明的信号，以及一艘载满冬眠者的方舟，都将在接下来的数分钟里等待你的选择。\n\n没有完美答案。每次决定都会把你推向一条不同的世界线。',
-        style: TextStyle(height: 1.7, fontSize: 16),
+      Text(
+        session.pack.intro.body,
+        style: const TextStyle(height: 1.7, fontSize: 16),
       ),
       const Spacer(),
-      FilledButton(onPressed: onContinue, child: const Text('进入决策室')),
+      FilledButton(
+        onPressed: onContinue,
+        child: Text(session.pack.intro.buttonText),
+      ),
     ],
   );
 }
@@ -222,7 +328,12 @@ class EventPage extends StatelessWidget {
             ),
           ],
         ),
-        LinearProgressIndicator(value: (state.choiceHistory.length + 1) / 6),
+        LinearProgressIndicator(
+          value:
+              ((state.choiceHistory.length + 1) /
+                      session.pack.expectedTaskCount)
+                  .clamp(0, 1),
+        ),
         const SizedBox(height: 28),
         Text(event.title, style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: 18),
