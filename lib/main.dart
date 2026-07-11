@@ -9,9 +9,13 @@ import 'story_catalog.dart';
 final repositoryProvider = Provider<SaveRepository>(
   (ref) => LocalSaveRepository(),
 );
+final seedGeneratorProvider = Provider<SeedGenerator>(
+  (ref) => RandomSeedGenerator(),
+);
 final contentRepositoryProvider = Provider<ContentPackRepository>(
   (ref) => const AssetContentPackRepository({
     'silent-tide': 'assets/content/core_pack.json',
+    'santi': 'assets/content/santi.json',
   }),
 );
 final gameProvider = AsyncNotifierProvider<GameNotifier, GameSession?>(
@@ -26,6 +30,7 @@ class GameNotifier extends AsyncNotifier<GameSession?> {
       stories: builtInStories,
       contentRepository: ref.read(contentRepositoryProvider),
       saveRepository: ref.read(repositoryProvider),
+      seedGenerator: ref.read(seedGeneratorProvider),
     );
     return null;
   }
@@ -331,7 +336,7 @@ class EventPage extends StatelessWidget {
         LinearProgressIndicator(
           value:
               ((state.choiceHistory.length + 1) /
-                      session.pack.flowRules.requiredChoiceCount)
+                      session.pack.flowRules.maximumChoiceCount)
                   .clamp(0, 1),
         ),
         const SizedBox(height: 28),
@@ -375,7 +380,7 @@ class ResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = session.state!;
-    final ending = EndingResolver().resolve(state, session.pack);
+    final ending = session.runtime.endingResolver.resolve(state, session.pack);
     final archetype = ArchetypeMatcher().match(
       TendencyProfile(state.dimensionScores),
       session.pack.archetypes,
@@ -400,17 +405,25 @@ class ResultPage extends StatelessWidget {
         Text(archetype.description),
         const SizedBox(height: 24),
         Text('人格倾向', style: Theme.of(context).textTheme.titleMedium),
-        for (final e in state.dimensionScores.entries)
+        for (final dimension in session.pack.dimensions.where(
+          (item) => item.visible,
+        ))
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Row(
               children: [
-                SizedBox(width: 90, child: Text(e.key)),
+                SizedBox(width: 90, child: Text(dimension.label)),
                 Expanded(
-                  child: LinearProgressIndicator(value: (e.value + 6) / 12),
+                  child: LinearProgressIndicator(
+                    value:
+                        ((state.dimensionScores[dimension.id]! -
+                                    dimension.minimum) /
+                                (dimension.maximum - dimension.minimum))
+                            .clamp(0, 1),
+                  ),
                 ),
                 const SizedBox(width: 12),
-                Text(e.value >= 0 ? '+${e.value}' : '${e.value}'),
+                Text('${state.dimensionScores[dimension.id]}'),
               ],
             ),
           ),

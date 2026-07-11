@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "packId": "silent-tide",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "title": "星海抉择",
   "summary": "一次宇宙文明危机中的人格世界线实验。",
   "intro": {
@@ -10,16 +10,79 @@
     "buttonText": "进入决策室"
   },
   "flowRules": {
-    "requiredChoiceCount": 7,
-    "enforceEqualPathLength": true
+    "minimumChoiceCount": 7,
+    "maximumChoiceCount": 7,
+    "initialFlags": {},
+    "endingRules": [
+      {
+        "endingId": "bridge",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "__ending_bridge",
+            "value": true
+          }
+        ]
+      },
+      {
+        "endingId": "dawn",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "__ending_dawn",
+            "value": true
+          }
+        ]
+      },
+      {
+        "endingId": "embers",
+        "conditions": []
+      }
+    ],
+    "randomRoutes": []
   },
   "startEventId": "signal",
   "dimensions": [
-    "文明责任",
-    "理性决策",
-    "风险偏好",
-    "道德边界",
-    "威慑倾向"
+    {
+      "id": "文明责任",
+      "label": "文明责任",
+      "minimum": -10,
+      "maximum": 12,
+      "initialValue": 0,
+      "visible": true
+    },
+    {
+      "id": "理性决策",
+      "label": "理性决策",
+      "minimum": -10,
+      "maximum": 12,
+      "initialValue": 0,
+      "visible": true
+    },
+    {
+      "id": "风险偏好",
+      "label": "风险偏好",
+      "minimum": -10,
+      "maximum": 12,
+      "initialValue": 0,
+      "visible": true
+    },
+    {
+      "id": "道德边界",
+      "label": "道德边界",
+      "minimum": -10,
+      "maximum": 12,
+      "initialValue": 0,
+      "visible": true
+    },
+    {
+      "id": "威慑倾向",
+      "label": "威慑倾向",
+      "minimum": -10,
+      "maximum": 12,
+      "initialValue": 0,
+      "visible": true
+    }
   ],
   "archetypes": [
     {
@@ -96,7 +159,14 @@
               "value": true
             }
           ],
-          "nextEventId": "ark"
+          "routes": [
+            {
+              "eventId": "ark",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         },
         {
           "id": "signal-answer",
@@ -120,7 +190,14 @@
               "value": true
             }
           ],
-          "nextEventId": "ark"
+          "routes": [
+            {
+              "eventId": "ark",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         },
         {
           "id": "signal-silence",
@@ -134,7 +211,14 @@
               "value": 2
             }
           ],
-          "nextEventId": "ark"
+          "routes": [
+            {
+              "eventId": "ark",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         }
       ]
     },
@@ -167,7 +251,14 @@
               "value": true
             }
           ],
-          "nextEventId": "colony"
+          "routes": [
+            {
+              "eventId": "colony",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         },
         {
           "id": "ark-guide",
@@ -181,7 +272,14 @@
               "value": 2
             }
           ],
-          "nextEventId": "colony"
+          "routes": [
+            {
+              "eventId": "colony",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         }
       ]
     },
@@ -214,7 +312,14 @@
               "value": true
             }
           ],
-          "nextEventId": "probe"
+          "routes": [
+            {
+              "eventId": "probe",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         },
         {
           "id": "colony-priority",
@@ -233,7 +338,14 @@
               "value": -2
             }
           ],
-          "nextEventId": "probe"
+          "routes": [
+            {
+              "eventId": "probe",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         }
       ]
     },
@@ -267,7 +379,14 @@
               "value": true
             }
           ],
-          "nextEventId": "visitor"
+          "routes": [
+            {
+              "eventId": "visitor",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         },
         {
           "id": "probe-jump",
@@ -286,7 +405,14 @@
               "value": true
             }
           ],
-          "nextEventId": "visitor"
+          "routes": [
+            {
+              "eventId": "visitor",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         },
         {
           "id": "probe-hold",
@@ -305,7 +431,14 @@
               "value": -1
             }
           ],
-          "nextEventId": "visitor"
+          "routes": [
+            {
+              "eventId": "visitor",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         }
       ]
     },
@@ -338,7 +471,14 @@
               "value": true
             }
           ],
-          "nextEventId": "council"
+          "routes": [
+            {
+              "eventId": "council",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         },
         {
           "id": "visitor-line",
@@ -352,7 +492,14 @@
               "value": 3
             }
           ],
-          "nextEventId": "council"
+          "routes": [
+            {
+              "eventId": "council",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         }
       ]
     },
@@ -380,7 +527,14 @@
               "value": 1
             }
           ],
-          "nextEventId": "final"
+          "routes": [
+            {
+              "eventId": "final",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         },
         {
           "id": "council-route",
@@ -399,7 +553,14 @@
               "value": -2
             }
           ],
-          "nextEventId": "final"
+          "routes": [
+            {
+              "eventId": "final",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
         }
       ]
     },
@@ -426,9 +587,15 @@
               "type": "addScore",
               "key": "文明责任",
               "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "__ending_dawn",
+              "value": true
             }
           ],
-          "endingId": "dawn"
+          "routes": [],
+          "endsStory": true
         },
         {
           "id": "final-contact",
@@ -451,9 +618,15 @@
               "type": "addScore",
               "key": "道德边界",
               "value": 1
+            },
+            {
+              "type": "setFlag",
+              "key": "__ending_bridge",
+              "value": true
             }
           ],
-          "endingId": "bridge"
+          "routes": [],
+          "endsStory": true
         },
         {
           "id": "final-seal",
@@ -465,9 +638,15 @@
               "type": "addScore",
               "key": "威慑倾向",
               "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "__ending_embers",
+              "value": true
             }
           ],
-          "endingId": "embers"
+          "routes": [],
+          "endsStory": true
         }
       ]
     }

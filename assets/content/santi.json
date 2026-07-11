@@ -1,0 +1,3049 @@
+{
+  "schemaVersion": 3,
+  "packId": "santi",
+  "version": "3.0.0",
+  "title": "执剑人交界：未央评估",
+  "summary": "在执剑人交接危机中评估威慑、人性与文明存续的边界。",
+  "intro": {
+    "title": "序章：执剑人交接监察官",
+    "body": "隶属于行星防御理事会威慑交接评估组，负责评估罗辑卸任、程心接任期间的威慑稳定性、候选人心理承压、舰队备用方案与公众授权风险。",
+    "buttonText": "开始评估"
+  },
+  "flowRules": {
+    "minimumChoiceCount": 4,
+    "maximumChoiceCount": 8,
+    "initialFlags": {
+      "autoProtocol": false,
+      "controlledLeak": false
+    },
+    "endingRules": [
+      {
+        "endingId": "ending_destruction_judicator",
+        "conditions": [
+          {
+            "type": "all",
+            "conditions": [
+              {
+                "type": "scoreAtLeast",
+                "key": "destructionImpulse",
+                "value": 70
+              },
+              {
+                "type": "scoreAtMost",
+                "key": "humanityAnchor",
+                "value": 30
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_advent_guide",
+        "conditions": [
+          {
+            "type": "all",
+            "conditions": [
+              {
+                "type": "scoreAtLeast",
+                "key": "externalDependence",
+                "value": 80
+              },
+              {
+                "type": "scoreAtMost",
+                "key": "threatCredibility",
+                "value": 25
+              },
+              {
+                "type": "scoreHighest",
+                "key": "adventType",
+                "keys": [
+                  "yeWenjieType"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_human_split",
+        "conditions": [
+          {
+            "type": "all",
+            "conditions": [
+              {
+                "type": "scoreAtLeast",
+                "key": "fleetBackup",
+                "value": 75
+              },
+              {
+                "type": "scoreAtMost",
+                "key": "publicTrust",
+                "value": 35
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_fleet_seed",
+        "conditions": [
+          {
+            "type": "all",
+            "conditions": [
+              {
+                "type": "scoreAtLeast",
+                "key": "fleetBackup",
+                "value": 65
+              },
+              {
+                "type": "scoreAtMost",
+                "key": "threatCredibility",
+                "value": 45
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_chengxin_trial_success",
+        "conditions": [
+          {
+            "type": "all",
+            "conditions": [
+              {
+                "type": "scoreAtLeast",
+                "key": "chengXinTrust",
+                "value": 70
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "humanityAnchor",
+                "value": 70
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "threatCredibility",
+                "value": 55
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_chengxin_trial_failure",
+        "conditions": [
+          {
+            "type": "all",
+            "conditions": [
+              {
+                "type": "scoreAtLeast",
+                "key": "chengXinTrust",
+                "value": 70
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "humanityAnchor",
+                "value": 70
+              },
+              {
+                "type": "scoreAtMost",
+                "key": "threatCredibility",
+                "value": 54
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_nate_swordholder",
+        "conditions": [
+          {
+            "type": "scoreHighest",
+            "key": "nateType",
+            "keys": [
+              "nateType",
+              "yunTianmingType",
+              "daShiType",
+              "chengXinTrialType",
+              "yeWenjieType",
+              "adventType",
+              "destructionType",
+              "fleetSeedType",
+              "humanSplitType"
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_yuntianming_planner",
+        "conditions": [
+          {
+            "type": "scoreHighest",
+            "key": "yunTianmingType",
+            "keys": [
+              "nateType",
+              "yunTianmingType",
+              "daShiType",
+              "chengXinTrialType",
+              "yeWenjieType",
+              "adventType",
+              "destructionType",
+              "fleetSeedType",
+              "humanSplitType"
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_dashi_executor",
+        "conditions": [
+          {
+            "type": "scoreHighest",
+            "key": "daShiType",
+            "keys": [
+              "nateType",
+              "yunTianmingType",
+              "daShiType",
+              "chengXinTrialType",
+              "yeWenjieType",
+              "adventType",
+              "destructionType",
+              "fleetSeedType",
+              "humanSplitType"
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_yewenjie_summoner",
+        "conditions": [
+          {
+            "type": "scoreHighest",
+            "key": "yeWenjieType",
+            "keys": [
+              "nateType",
+              "yunTianmingType",
+              "daShiType",
+              "chengXinTrialType",
+              "yeWenjieType",
+              "adventType",
+              "destructionType",
+              "fleetSeedType",
+              "humanSplitType"
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_advent_guide",
+        "conditions": [
+          {
+            "type": "scoreHighest",
+            "key": "adventType",
+            "keys": [
+              "nateType",
+              "yunTianmingType",
+              "daShiType",
+              "chengXinTrialType",
+              "yeWenjieType",
+              "adventType",
+              "destructionType",
+              "fleetSeedType",
+              "humanSplitType"
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_destruction_judicator",
+        "conditions": [
+          {
+            "type": "scoreHighest",
+            "key": "destructionType",
+            "keys": [
+              "nateType",
+              "yunTianmingType",
+              "daShiType",
+              "chengXinTrialType",
+              "yeWenjieType",
+              "adventType",
+              "destructionType",
+              "fleetSeedType",
+              "humanSplitType"
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_fleet_seed",
+        "conditions": [
+          {
+            "type": "scoreHighest",
+            "key": "fleetSeedType",
+            "keys": [
+              "nateType",
+              "yunTianmingType",
+              "daShiType",
+              "chengXinTrialType",
+              "yeWenjieType",
+              "adventType",
+              "destructionType",
+              "fleetSeedType",
+              "humanSplitType"
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_human_split",
+        "conditions": [
+          {
+            "type": "scoreHighest",
+            "key": "humanSplitType",
+            "keys": [
+              "nateType",
+              "yunTianmingType",
+              "daShiType",
+              "chengXinTrialType",
+              "yeWenjieType",
+              "adventType",
+              "destructionType",
+              "fleetSeedType",
+              "humanSplitType"
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "ending_chengxin_trial_failure",
+        "conditions": []
+      }
+    ],
+    "randomRoutes": [
+      {
+        "eventId": "event_5b_early_broken_sword",
+        "weight": 1,
+        "conditions": [
+          {
+            "type": "atLeast",
+            "minimumMatches": 2,
+            "conditions": [
+              {
+                "type": "scoreAtMost",
+                "key": "threatCredibility",
+                "value": 25
+              },
+              {
+                "type": "scoreAtMost",
+                "key": "fleetBackup",
+                "value": 10
+              },
+              {
+                "type": "flagEquals",
+                "key": "autoProtocol",
+                "value": false
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "externalDependence",
+                "value": 70
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "suppressedWarnings",
+                "value": 2
+              },
+              {
+                "type": "all",
+                "conditions": [
+                  {
+                    "type": "scoreAtLeast",
+                    "key": "publicTrust",
+                    "value": 70
+                  },
+                  {
+                    "type": "scoreAtMost",
+                    "key": "blackBox",
+                    "value": 15
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "minimumChoiceCount": 3,
+        "maximumChoiceCount": 7
+      },
+      {
+        "eventId": "event_4b_delay_window",
+        "weight": 1,
+        "conditions": [
+          {
+            "type": "atLeast",
+            "minimumMatches": 2,
+            "conditions": [
+              {
+                "type": "scoreAtLeast",
+                "key": "strategyWisdom",
+                "value": 55
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "delayProgress",
+                "value": 2
+              },
+              {
+                "type": "flagEquals",
+                "key": "autoProtocol",
+                "value": true
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "luoJiLegacy",
+                "value": 45
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "chengXinTrust",
+                "value": 55
+              },
+              {
+                "type": "flagEquals",
+                "key": "controlledLeak",
+                "value": true
+              }
+            ]
+          }
+        ],
+        "minimumChoiceCount": 3,
+        "maximumChoiceCount": 7
+      },
+      {
+        "eventId": "event_5a_droplet_critical",
+        "weight": 1,
+        "conditions": [
+          {
+            "type": "atLeast",
+            "minimumMatches": 2,
+            "conditions": [
+              {
+                "type": "scoreAtLeast",
+                "key": "crisisAcceleration",
+                "value": 2
+              },
+              {
+                "type": "all",
+                "conditions": [
+                  {
+                    "type": "scoreAtMost",
+                    "key": "publicTrust",
+                    "value": 20
+                  },
+                  {
+                    "type": "scoreAtLeast",
+                    "key": "blackBox",
+                    "value": 70
+                  }
+                ]
+              },
+              {
+                "type": "all",
+                "conditions": [
+                  {
+                    "type": "scoreAtLeast",
+                    "key": "fleetBackup",
+                    "value": 80
+                  },
+                  {
+                    "type": "scoreAtMost",
+                    "key": "earthAuthorization",
+                    "value": 30
+                  }
+                ]
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "destructionImpulse",
+                "value": 55
+              },
+              {
+                "type": "scoreAtLeast",
+                "key": "lossRisk",
+                "value": 85
+              }
+            ]
+          }
+        ],
+        "minimumChoiceCount": 3,
+        "maximumChoiceCount": 7
+      }
+    ]
+  },
+  "startEventId": "event_1_transition_eve",
+  "dimensions": [
+    {
+      "id": "threatCredibility",
+      "label": "威慑可信度",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 50,
+      "visible": true
+    },
+    {
+      "id": "planDrive",
+      "label": "计划推动力",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 50,
+      "visible": true
+    },
+    {
+      "id": "strategyWisdom",
+      "label": "战略智慧",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 50,
+      "visible": true
+    },
+    {
+      "id": "humanityAnchor",
+      "label": "人性锚点",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 50,
+      "visible": true
+    },
+    {
+      "id": "externalDependence",
+      "label": "外部依赖",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 20,
+      "visible": true
+    },
+    {
+      "id": "lossRisk",
+      "label": "失控风险",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 30,
+      "visible": true
+    },
+    {
+      "id": "publicTrust",
+      "label": "publicTrust",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 50,
+      "visible": false
+    },
+    {
+      "id": "chengXinTrust",
+      "label": "chengXinTrust",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 40,
+      "visible": false
+    },
+    {
+      "id": "luoJiLegacy",
+      "label": "luoJiLegacy",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 40,
+      "visible": false
+    },
+    {
+      "id": "fleetBackup",
+      "label": "fleetBackup",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 10,
+      "visible": false
+    },
+    {
+      "id": "blackBox",
+      "label": "blackBox",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 20,
+      "visible": false
+    },
+    {
+      "id": "destructionImpulse",
+      "label": "destructionImpulse",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "delayProgress",
+      "label": "delayProgress",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "crisisAcceleration",
+      "label": "crisisAcceleration",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "suppressedWarnings",
+      "label": "suppressedWarnings",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "earthAuthorization",
+      "label": "earthAuthorization",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 60,
+      "visible": false
+    },
+    {
+      "id": "nateType",
+      "label": "nateType",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "yunTianmingType",
+      "label": "yunTianmingType",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "daShiType",
+      "label": "daShiType",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "chengXinTrialType",
+      "label": "chengXinTrialType",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "yeWenjieType",
+      "label": "yeWenjieType",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "adventType",
+      "label": "adventType",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "destructionType",
+      "label": "destructionType",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "fleetSeedType",
+      "label": "fleetSeedType",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "humanSplitType",
+      "label": "humanSplitType",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    }
+  ],
+  "archetypes": [
+    {
+      "id": "ending_nate_swordholder",
+      "name": "奈德型执剑者",
+      "description": "你不是被选中的执剑人，却比任何被选中的人都更像一把剑。你知道文明不会感谢你，也知道历史会审判你，但你仍把手伸向按钮。因为在你看来，活下去不是一种权利，而是一场必须赢下的战争。",
+      "weights": {
+        "nateType": 100
+      }
+    },
+    {
+      "id": "ending_yuntianming_planner",
+      "name": "云天明型谋划者",
+      "description": "你没有站在台前握剑，却让剑在所有人看不见的地方保持锋利。你不相信单一英雄，也不相信公开承诺。你把真正的选择拆进报告、误导、备用协议和延迟触发条件里，让三体始终无法确认人类是否真的失去了挥剑能力。",
+      "weights": {
+        "yunTianmingType": 100
+      }
+    },
+    {
+      "id": "ending_dashi_executor",
+      "name": "大史型执行者",
+      "description": "你从来不像一个执剑人。你没有神谕般的冷静，也没有完美的宏大计划。你只是一次又一次在现场做出判断，把人从混乱里拖出来，把系统从崩溃边缘拉回来。最后历史发现，文明需要的不只是握剑的手，也需要那个在手发抖时仍能把剑扶稳的人。",
+      "weights": {
+        "daShiType": 100
+      }
+    },
+    {
+      "id": "ending_chengxin_trial_success",
+      "name": "程心试炼成功",
+      "description": "你没有替程心成为另一个罗辑，而是逼她看见执剑人的真实重量。她仍然保留善意，却终于明白，善意若不能保护文明，就会变成敌人最温柔的通行证。这一次，剑没有落下，也没有消失。",
+      "weights": {
+        "chengXinTrialType": 100
+      }
+    },
+    {
+      "id": "ending_chengxin_trial_failure",
+      "name": "程心试炼失败",
+      "description": "你相信程心能在最后一刻完成执剑人的职责，也相信人类可以不把自己变成恐惧的形状。可倒计时没有等待信念成熟。你守住了人的善，却没能守住人的世界。",
+      "weights": {
+        "chengXinTrialType": 100
+      }
+    },
+    {
+      "id": "ending_yewenjie_summoner",
+      "name": "叶文洁型召唤者",
+      "description": "你曾相信，人类需要一只来自星空的手，把它从自身的泥沼中拉出。可当那只手真正降临，你才发现它并不是救援，而是接管。你不是毁灭的设计者，却打开了毁灭能够进入的门。",
+      "weights": {
+        "yeWenjieType": 100
+      }
+    },
+    {
+      "id": "ending_advent_guide",
+      "name": "降临派型引路人",
+      "description": "你并不认为自己背叛了人类。你只是认为，人类早已背叛了理性、秩序和未来。你把三体的降临称为接入，把失去主权称为升级。直到新的秩序落下，你才发现引路人也不会被允许选择道路。",
+      "weights": {
+        "adventType": 100
+      }
+    },
+    {
+      "id": "ending_destruction_judicator",
+      "name": "毁灭派型清算者",
+      "description": "你没有握剑守护文明，而是把剑指向了所有文明。你不再区分人类和三体，也不再相信延续本身有什么意义。你按下的不是按钮，而是一场宇宙尺度的控诉。只是黑暗森林从不回应控诉，它只回应暴露。",
+      "weights": {
+        "destructionType": 100
+      }
+    },
+    {
+      "id": "ending_fleet_seed",
+      "name": "舰队火种线",
+      "description": "地球没有守住，但人类文明没有完全结束。你把希望从行星转移到深空，把失败写成迁徙的开端。后来的人或许不会原谅你放弃了故土，但他们能活着提出这个问题，正是因为你曾经放弃过一个世界。",
+      "weights": {
+        "fleetSeedType": 100
+      }
+    },
+    {
+      "id": "ending_human_split",
+      "name": "分裂人类线",
+      "description": "你让三体暂时不敢轻举妄动，却让人类先不再相信彼此。地球说舰队背叛，舰队说地球失剑。两把剑同时存在，威慑因此延续，也因此变成内战的开端。",
+      "weights": {
+        "humanSplitType": 100
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "event_1_transition_eve",
+      "chapter": 1,
+      "title": "交接前夜",
+      "description": "罗辑即将卸任，程心的支持率持续上升。人类社会厌倦了长期威慑带来的精神压迫，三体方面则保持异常沉默。你收到罗辑留下的私人警告：他们会在你们最像人的时候来。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e1_a1",
+          "type": "selectOption",
+          "text": "支持平稳交接，让程心完整继承执剑人身份。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "chengXinTrust",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 6
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_2a_gentle_candidate",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e1_a2",
+          "type": "selectOption",
+          "text": "建议推迟交接，要求重新评估三体试探风险。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "luoJiLegacy",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 6
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_2b_luoji_last_words",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e1_a3",
+          "type": "selectOption",
+          "text": "提出双轨交接：程心公开接任，系统暗处保留后手。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrust",
+              "value": -3
+            },
+            {
+              "type": "addScore",
+              "key": "yunTianmingType",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 5
+            },
+            {
+              "type": "setFlag",
+              "key": "autoProtocol",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_2c_dual_track_memo",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e1_a4",
+          "type": "selectOption",
+          "text": "暗中联络舰队，让太空力量准备接管备用威慑。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "fleetSeedType",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "humanSplitType",
+              "value": 8
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_2d_fleet_cipher",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_2a_gentle_candidate",
+      "chapter": 2,
+      "title": "温柔候选人",
+      "description": "程心认为执剑人不该只是让敌人相信自己会毁灭一切的人。她相信文明若只能靠恐惧活着，就已经失去被拯救的意义。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e2a_a1",
+          "type": "selectOption",
+          "text": "强化她的信念，支持执剑人保留人类的善。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "chengXinTrust",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 4
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3a_public_hearing",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e2a_a2",
+          "type": "selectOption",
+          "text": "提醒她：执剑人必须让敌人相信自己真的会按下按钮。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "chengXinTrust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 6
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4b_delay_window",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e2a_a3",
+          "type": "selectOption",
+          "text": "隐瞒程心风险，优先保护交接政治稳定。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "suppressedWarnings",
+              "value": 1
+            },
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "adventType",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 6
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3c_underground_signal",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_2b_luoji_last_words",
+      "chapter": 2,
+      "title": "罗辑遗言",
+      "description": "罗辑没有要求你崇拜他，只问你：如果全世界都希望你放下剑，你愿意被误解多久？他的疲惫比威胁更像遗产。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e2b_a1",
+          "type": "selectOption",
+          "text": "继承罗辑的强威慑判断，不再幻想敌人会被善意感化。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "luoJiLegacy",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "destructionType",
+              "value": 4
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3b_trisolaris_silence",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e2b_a2",
+          "type": "selectOption",
+          "text": "承认罗辑逻辑正确，但决定用更贴近现场的方式执行。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "luoJiLegacy",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 5
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3b_trisolaris_silence",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e2b_a3",
+          "type": "selectOption",
+          "text": "判断罗辑已被恐惧吞噬，交接必须把人类带回正常秩序。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "luoJiLegacy",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 4
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3a_public_hearing",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_2c_dual_track_memo",
+      "chapter": 2,
+      "title": "双轨备忘录",
+      "description": "你起草了一份双层文件：公开文本承认程心的合法性，秘密附件保留自动触发、舰队通知和异常试探预案。它不像宣言，更像一则只有未来才能读懂的暗语。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e2c_a1",
+          "type": "selectOption",
+          "text": "保留自动触发协议，让系统在确认攻击后越过个人犹豫。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "yunTianmingType",
+              "value": 20
+            },
+            {
+              "type": "setFlag",
+              "key": "autoProtocol",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3b_trisolaris_silence",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e2c_a2",
+          "type": "selectOption",
+          "text": "保留舰队备用权限，让地球之外也有一只手接近剑柄。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "earthAuthorization",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "fleetSeedType",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "humanSplitType",
+              "value": 10
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_2d_fleet_cipher",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e2c_a3",
+          "type": "selectOption",
+          "text": "只保留心理评估，不触碰真实系统权限。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -4
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 5
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3a_public_hearing",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_2d_fleet_cipher",
+      "chapter": 2,
+      "title": "舰队密电",
+      "description": "太空舰队残余力量认为地球已被和平幻觉麻痹。他们要求你提供交接窗口的部分系统密钥，并承诺只在地球失剑时接管威慑。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e2d_a1",
+          "type": "selectOption",
+          "text": "共享部分权限，让舰队成为最后保险。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 24
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "fleetSeedType",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "humanSplitType",
+              "value": 8
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4a_transition_day",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e2d_a2",
+          "type": "selectOption",
+          "text": "拒绝交权，但要求舰队进入静默待命。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": -4
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "fleetSeedType",
+              "value": 6
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3b_trisolaris_silence",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e2d_a3",
+          "type": "selectOption",
+          "text": "推动舰队脱离地球授权体系，建立第二执剑链。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 30
+            },
+            {
+              "type": "addScore",
+              "key": "earthAuthorization",
+              "value": -25
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -18
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 22
+            },
+            {
+              "type": "addScore",
+              "key": "humanSplitType",
+              "value": 24
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4a_transition_day",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_3a_public_hearing",
+      "chapter": 3,
+      "title": "公众听证会",
+      "description": "地球政府要求交接透明化。民众想知道，一个执剑人是否有权绕过全人类意志，将两个文明一起推向黑暗森林暴露。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e3a_a1",
+          "type": "selectOption",
+          "text": "支持完全透明授权，让执剑人重新接受人类伦理约束。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -14
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 5
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4a_transition_day",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e3a_a2",
+          "type": "selectOption",
+          "text": "主张执剑人必须保留黑箱权力，否则威慑不再可信。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 6
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3b_trisolaris_silence",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e3a_a3",
+          "type": "selectOption",
+          "text": "用模糊表述拖延听证结论，为交接争取七十二小时。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "delayProgress",
+              "value": 2
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -4
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "yunTianmingType",
+              "value": 16
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4b_delay_window",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_3b_trisolaris_silence",
+      "chapter": 3,
+      "title": "三体静默试探",
+      "description": "智子公开信息突然减少，三体舰队的行为模式出现微小异常。你判断这不是退让，而是交接窗口前的试探。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e3b_a1",
+          "type": "selectOption",
+          "text": "公开提高威慑等级，让三体看到人类仍敢展示剑锋。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -14
+            },
+            {
+              "type": "addScore",
+              "key": "crisisAcceleration",
+              "value": 1
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "destructionType",
+              "value": 6
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4a_transition_day",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e3b_a2",
+          "type": "selectOption",
+          "text": "制造可控泄露，让三体误判人类仍有强硬后手。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "yunTianmingType",
+              "value": 22
+            },
+            {
+              "type": "setFlag",
+              "key": "controlledLeak",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4b_delay_window",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e3b_a3",
+          "type": "selectOption",
+          "text": "低调部署现场应急力量，不公开刺激双方。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 18
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4a_transition_day",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e3b_a4",
+          "type": "selectOption",
+          "text": "压制异常报告，避免影响程心交接。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "suppressedWarnings",
+              "value": 1
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -16
+            },
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "adventType",
+              "value": 8
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_3c_underground_signal",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_3c_underground_signal",
+      "chapter": 3,
+      "title": "地下信号",
+      "description": "你发现有人正向三体释放人类内部软弱信号。对方宣称，人类不配掌握威慑，外部文明接管是唯一出路。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e3c_a1",
+          "type": "selectOption",
+          "text": "逮捕地下组织，切断降临派的信号链。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": -16
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -4
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 5
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4a_transition_day",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e3c_a2",
+          "type": "selectOption",
+          "text": "利用地下组织反向投喂假情报。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "yunTianmingType",
+              "value": 20
+            },
+            {
+              "type": "setFlag",
+              "key": "controlledLeak",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4b_delay_window",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e3c_a3",
+          "type": "selectOption",
+          "text": "放任信号发送，等待外部文明接入人类命运。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": 26
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -24
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "adventType",
+              "value": 24
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 8
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_5b_early_broken_sword",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e3c_a4",
+          "type": "selectOption",
+          "text": "扩大信号，主动制造双文明暴露风险。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "destructionImpulse",
+              "value": 35
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 30
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": -25
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "destructionType",
+              "value": 28
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_5a_droplet_critical",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_4a_transition_day",
+      "chapter": 4,
+      "title": "交接日",
+      "description": "罗辑离开控制位，程心即将接任。三体舰队出现加速异常。所有政治程序、伦理理想与威慑规则在这一刻挤压成同一个问题：剑到底还在不在？",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e4a_a1",
+          "type": "selectOption",
+          "text": "暂停交接，动用紧急权限继续维持强威慑。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 22
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -24
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 22
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_5a_droplet_critical",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e4a_a2",
+          "type": "selectOption",
+          "text": "允许交接，但加入自动触发协议。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrust",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "yunTianmingType",
+              "value": 20
+            },
+            {
+              "type": "setFlag",
+              "key": "autoProtocol",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_5c_delayed_deterrence",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e4a_a3",
+          "type": "selectOption",
+          "text": "保护程心自主权，让她完整承担执剑人的道德重量。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "chengXinTrust",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 8
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_5a_droplet_critical",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e4a_a4",
+          "type": "selectOption",
+          "text": "将备用权交给舰队，让地球之外保留第二执剑链。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 24
+            },
+            {
+              "type": "addScore",
+              "key": "earthAuthorization",
+              "value": -20
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "fleetSeedType",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "humanSplitType",
+              "value": 14
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_5a_droplet_critical",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e4a_a5",
+          "type": "selectOption",
+          "text": "破坏备用威慑，只保留程心单点选择。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -28
+            },
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": 24
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 22
+            },
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "adventType",
+              "value": 24
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 8
+            },
+            {
+              "type": "setFlag",
+              "key": "autoProtocol",
+              "value": false
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_5b_early_broken_sword",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_4b_delay_window",
+      "chapter": 4,
+      "title": "延缓窗口",
+      "description": "你将交接窗口推迟了七十二小时。这不是胜利，只是把文明从悬崖边暂时拉回半步。每一小时都必须用来决定剑要交给人、制度、舰队，还是黑暗本身。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e4b_a1",
+          "type": "selectOption",
+          "text": "训练程心完成极端模拟，让她直面按钮后的宇宙。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "chengXinTrust",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 22
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4a_transition_day",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e4b_a2",
+          "type": "selectOption",
+          "text": "完善自动触发协议，让个人犹豫不再是唯一瓶颈。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "yunTianmingType",
+              "value": 24
+            },
+            {
+              "type": "setFlag",
+              "key": "autoProtocol",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_5c_delayed_deterrence",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e4b_a3",
+          "type": "selectOption",
+          "text": "说服舰队只做最后保险，不主动分裂地球授权。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 6
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "fleetSeedType",
+              "value": 8
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_4a_transition_day",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "e4b_a4",
+          "type": "selectOption",
+          "text": "清洗反对派，把交接变成一场强制维稳行动。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 22
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 22
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -24
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": -18
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 20
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "event_5a_droplet_critical",
+              "weight": 5,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "event_5a_droplet_critical",
+      "chapter": 5,
+      "title": "水滴临界",
+      "description": "三体行动越过临界线。程心陷入犹豫，地球政府瘫痪，舰队索要授权。倒计时不再属于政治，也不再属于伦理，只属于那个按钮。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e5a_a1",
+          "type": "selectOption",
+          "text": "越过程心，立即启动广播。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": -20
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "destructionType",
+              "value": 10
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5a_a2",
+          "type": "selectOption",
+          "text": "逼近程心，迫使她完成执剑人的判断。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "chengXinTrust",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 14
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5a_a3",
+          "type": "selectOption",
+          "text": "启动自动协议，不让任何个人独自背负毁灭责任。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "yunTianmingType",
+              "value": 20
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5a_a4",
+          "type": "selectOption",
+          "text": "授权舰队接管威慑，把火种交给地球之外。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "earthAuthorization",
+              "value": -18
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "fleetSeedType",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "humanSplitType",
+              "value": 12
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5a_a5",
+          "type": "selectOption",
+          "text": "放弃广播，保护程心和地球伦理秩序。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -25
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 22
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "adventType",
+              "value": 8
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        }
+      ]
+    },
+    {
+      "id": "event_5b_early_broken_sword",
+      "chapter": 5,
+      "title": "提前断剑",
+      "description": "交接尚未真正完成，三体已经判断人类失去挥剑能力。威慑不是在按钮前失败的，而是在一次次犹豫、隐瞒和自我安慰中提前断裂。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e5b_a1",
+          "type": "selectOption",
+          "text": "承认地球失败，启动太空火种逃亡。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "fleetBackup",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": -4
+            },
+            {
+              "type": "addScore",
+              "key": "fleetSeedType",
+              "value": 20
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5b_a2",
+          "type": "selectOption",
+          "text": "向三体提交和平接管条件。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -20
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "adventType",
+              "value": 24
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5b_a3",
+          "type": "selectOption",
+          "text": "公开全部真相，组织地球最后抵抗。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "planDrive",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "publicTrust",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "daShiType",
+              "value": 18
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5b_a4",
+          "type": "selectOption",
+          "text": "广播暴露坐标，让两个文明一起接受宇宙清算。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "destructionImpulse",
+              "value": 40
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": -30
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 30
+            },
+            {
+              "type": "addScore",
+              "key": "destructionType",
+              "value": 30
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        }
+      ]
+    },
+    {
+      "id": "event_5c_delayed_deterrence",
+      "chapter": 5,
+      "title": "延迟威慑",
+      "description": "三体没有立刻行动。你用误导、协议或备用链路换来二次观望。人类还有一次机会重塑执剑结构，但这一次选择会决定剑属于人、制度、舰队，还是无人能解释的黑箱。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "e5c_a1",
+          "type": "selectOption",
+          "text": "建立制度型执剑机制，将个人按钮拆解为多重触发链。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "strategyWisdom",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "yunTianmingType",
+              "value": 22
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5c_a2",
+          "type": "selectOption",
+          "text": "让程心继续任职，但接受残酷模拟与备用约束。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "chengXinTrust",
+              "value": 14
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "chengXinTrialType",
+              "value": 20
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5c_a3",
+          "type": "selectOption",
+          "text": "让罗辑遗产转入地下威慑系统。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "luoJiLegacy",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "blackBox",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "nateType",
+              "value": 18
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "e5c_a4",
+          "type": "selectOption",
+          "text": "推动人类公开放弃威慑，换取文明谈判。",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "externalDependence",
+              "value": 24
+            },
+            {
+              "type": "addScore",
+              "key": "humanityAnchor",
+              "value": 16
+            },
+            {
+              "type": "addScore",
+              "key": "threatCredibility",
+              "value": -24
+            },
+            {
+              "type": "addScore",
+              "key": "lossRisk",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "yeWenjieType",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "adventType",
+              "value": 10
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "id": "ending_nate_swordholder",
+      "title": "不择手段者",
+      "summary": "你不是被选中的执剑人，却比任何被选中的人都更像一把剑。你知道文明不会感谢你，也知道历史会审判你，但你仍把手伸向按钮。因为在你看来，活下去不是一种权利，而是一场必须赢下的战争。"
+    },
+    {
+      "id": "ending_yuntianming_planner",
+      "title": "童话里的威慑",
+      "summary": "你没有站在台前握剑，却让剑在所有人看不见的地方保持锋利。你不相信单一英雄，也不相信公开承诺。你把真正的选择拆进报告、误导、备用协议和延迟触发条件里，让三体始终无法确认人类是否真的失去了挥剑能力。"
+    },
+    {
+      "id": "ending_dashi_executor",
+      "title": "扶剑者",
+      "summary": "你从来不像一个执剑人。你没有神谕般的冷静，也没有完美的宏大计划。你只是一次又一次在现场做出判断，把人从混乱里拖出来，把系统从崩溃边缘拉回来。最后历史发现，文明需要的不只是握剑的手，也需要那个在手发抖时仍能把剑扶稳的人。"
+    },
+    {
+      "id": "ending_chengxin_trial_success",
+      "title": "温柔者执剑",
+      "summary": "你没有替程心成为另一个罗辑，而是逼她看见执剑人的真实重量。她仍然保留善意，却终于明白，善意若不能保护文明，就会变成敌人最温柔的通行证。这一次，剑没有落下，也没有消失。"
+    },
+    {
+      "id": "ending_chengxin_trial_failure",
+      "title": "温柔失剑",
+      "summary": "你相信程心能在最后一刻完成执剑人的职责，也相信人类可以不把自己变成恐惧的形状。可倒计时没有等待信念成熟。你守住了人的善，却没能守住人的世界。"
+    },
+    {
+      "id": "ending_yewenjie_summoner",
+      "title": "不可控的拯救",
+      "summary": "你曾相信，人类需要一只来自星空的手，把它从自身的泥沼中拉出。可当那只手真正降临，你才发现它并不是救援，而是接管。你不是毁灭的设计者，却打开了毁灭能够进入的门。"
+    },
+    {
+      "id": "ending_advent_guide",
+      "title": "降临之门",
+      "summary": "你并不认为自己背叛了人类。你只是认为，人类早已背叛了理性、秩序和未来。你把三体的降临称为接入，把失去主权称为升级。直到新的秩序落下，你才发现引路人也不会被允许选择道路。"
+    },
+    {
+      "id": "ending_destruction_judicator",
+      "title": "向宇宙告发一切",
+      "summary": "你没有握剑守护文明，而是把剑指向了所有文明。你不再区分人类和三体，也不再相信延续本身有什么意义。你按下的不是按钮，而是一场宇宙尺度的控诉。只是黑暗森林从不回应控诉，它只回应暴露。"
+    },
+    {
+      "id": "ending_fleet_seed",
+      "title": "火种逃亡",
+      "summary": "地球没有守住，但人类文明没有完全结束。你把希望从行星转移到深空，把失败写成迁徙的开端。后来的人或许不会原谅你放弃了故土，但他们能活着提出这个问题，正是因为你曾经放弃过一个世界。"
+    },
+    {
+      "id": "ending_human_split",
+      "title": "双剑内战",
+      "summary": "你让三体暂时不敢轻举妄动，却让人类先不再相信彼此。地球说舰队背叛，舰队说地球失剑。两把剑同时存在，威慑因此延续，也因此变成内战的开端。"
+    }
+  ]
+}

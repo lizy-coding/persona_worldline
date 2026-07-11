@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +25,15 @@ class AssetContentPackRepository implements ContentPackRepository {
     }
     return pack;
   }
+}
+
+class RandomSeedGenerator implements SeedGenerator {
+  RandomSeedGenerator({Random? random}) : _random = random ?? Random.secure();
+
+  final Random _random;
+
+  @override
+  int nextSeed() => _random.nextInt(0x7fffffff - 1) + 1;
 }
 
 class LocalSaveRepository implements SaveRepository {

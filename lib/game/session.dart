@@ -11,6 +11,10 @@ abstract interface class SaveRepository {
   Future<void> clear(String packId);
 }
 
+abstract interface class SeedGenerator {
+  int nextSeed();
+}
+
 class GameSession {
   const GameSession({
     required this.story,
@@ -39,8 +43,9 @@ class GameSession {
 }
 
 class GameController {
-  GameController(this.repository);
+  GameController(this.repository, this.seedGenerator);
   final SaveRepository repository;
+  final SeedGenerator seedGenerator;
   late GameSession session;
 
   Future<GameSession> initialize(
@@ -59,7 +64,7 @@ class GameController {
 
   Future<GameSession> newGame() async {
     await repository.clear(session.pack.packId);
-    final state = session.runtime.initialState();
+    final state = session.runtime.initialState(seedGenerator.nextSeed());
     await _save(state);
     return session = session.copyWith(state: state, clearError: true);
   }
@@ -84,17 +89,19 @@ class GameCoordinator {
     required this.stories,
     required this.contentRepository,
     required this.saveRepository,
+    required this.seedGenerator,
   });
   final List<StoryDescriptor> stories;
   final ContentPackRepository contentRepository;
   final SaveRepository saveRepository;
+  final SeedGenerator seedGenerator;
   GameController? _controller;
 
   Future<GameSession> selectStory(String packId) async {
     final story = stories.where((item) => item.packId == packId).firstOrNull;
     if (story == null) throw StateError('故事线不存在: $packId');
     final pack = await contentRepository.load(story);
-    final controller = GameController(saveRepository);
+    final controller = GameController(saveRepository, seedGenerator);
     _controller = controller;
     return controller.initialize(story, pack);
   }

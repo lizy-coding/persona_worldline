@@ -1,40 +1,52 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:persona_worldline/game/engine.dart';
 import 'package:persona_worldline/game/models.dart';
 import 'package:persona_worldline/game/session.dart';
 
 void main() {
-  late GameContentPack pack;
+  late GameContentPack corePack;
+  late GameContentPack santiPack;
+
   setUpAll(() {
-    final source = File('assets/content/core_pack.json').readAsStringSync();
-    pack = GameContentPack.decode(source);
+    corePack = _loadPack('assets/content/core_pack.json');
+    santiPack = _loadPack('assets/content/santi.json');
   });
 
-  test('内容包成功解析且结构完整', () {
-    expect(pack.events, hasLength(7));
-    expect(pack.endings.length, greaterThanOrEqualTo(2));
-    expect(pack.dimensions, hasLength(5));
-    expect(pack.intro.title, isNotEmpty);
-    expect(pack.schemaVersion, 2);
-    expect(pack.flowRules.requiredChoiceCount, 7);
-    expect(pack.flowRules.enforceEqualPathLength, isTrue);
+  test('两条世界线均符合 schema v3 内容契约', () {
+    expect(corePack.schemaVersion, 3);
+    expect(corePack.events, hasLength(7));
+    expect(corePack.flowRules.minimumChoiceCount, 7);
+    expect(corePack.flowRules.maximumChoiceCount, 7);
+
+    expect(santiPack.schemaVersion, 3);
+    expect(santiPack.events, hasLength(13));
+    expect(santiPack.endings, hasLength(10));
+    expect(santiPack.flowRules.minimumChoiceCount, 4);
+    expect(santiPack.flowRules.maximumChoiceCount, 8);
   });
 
-  test('无效 nextEventId 会被检测', () {
-    final json =
-        jsonDecode(File('assets/content/core_pack.json').readAsStringSync())
-            as Json;
-    (json['events'] as List).first['actions'][0]['nextEventId'] = 'missing';
-    expect(() => GameContentPack.fromJson(json), throwsFormatException);
+  test('每条世界线从维度契约构造自己的初始分数和 flags', () {
+    final coreState = GameRuntime(corePack).initialState(7);
+    expect(coreState.dimensionScores['文明责任'], 0);
+
+    final santiState = GameRuntime(santiPack).initialState(7);
+    expect(santiState.dimensionScores['threatCredibility'], 50);
+    expect(santiState.dimensionScores['lossRisk'], 30);
+    expect(santiState.flags['autoProtocol'], isFalse);
+    expect(santiState.flags['controlledLeak'], isFalse);
   });
 
-  test('不可达事件会被图结构校验检测', () {
-    final json =
-        jsonDecode(File('assets/content/core_pack.json').readAsStringSync())
-            as Json;
-    (json['events'] as List).add({
+  test('无效路由和不可达事件会被内容校验检测', () {
+    final invalidRoute = _loadJson('assets/content/core_pack.json');
+    final firstAction = (invalidRoute['events'] as List).first['actions'][0];
+    firstAction['routes'][0]['eventId'] = 'missing';
+    expect(() => GameContentPack.fromJson(invalidRoute), throwsFormatException);
+
+    final unreachable = _loadJson('assets/content/core_pack.json');
+    (unreachable['events'] as List).add({
       'id': 'orphan',
       'chapter': 9,
       'title': '孤立事件',
@@ -47,38 +59,28 @@ void main() {
           'text': '结束',
           'conditions': [],
           'effects': [],
-          'endingId': 'dawn',
+          'routes': [],
+          'endsStory': true,
         },
       ],
     });
     expect(
-      () => GameContentPack.fromJson(json),
+      () => GameContentPack.fromJson(unreachable),
       throwsA(predicate((error) => '$error'.contains('不可达事件'))),
     );
   });
 
-  test('配置的选择次数与所有结局路径一致', () {
-    final json =
-        jsonDecode(File('assets/content/core_pack.json').readAsStringSync())
-            as Json;
-    (json['flowRules'] as Json)['requiredChoiceCount'] = 6;
-    expect(
-      () => GameContentPack.fromJson(json),
-      throwsA(predicate((error) => '$error'.contains('选择次数不符合'))),
-    );
-  });
-
-  test('未知行动、条件和效果类型返回诊断错误', () {
+  test('未知规则类型和错误复合条件会返回诊断错误', () {
     expect(
       () => PlayerAction.fromJson({'id': 'x', 'type': 'dice', 'text': 'x'}),
-      throwsA(predicate((e) => '$e'.contains('未知 action type'))),
+      throwsA(predicate((error) => '$error'.contains('未知 action type'))),
     );
     expect(
-      () => GameCondition.fromJson({
-        'type': 'mystery',
-        'key': 'x',
-        'value': true,
-      }),
+      () => GameCondition.fromJson({'type': 'mystery'}),
+      throwsFormatException,
+    );
+    expect(
+      () => GameCondition.fromJson({'type': 'not', 'conditions': []}),
       throwsFormatException,
     );
     expect(
@@ -87,27 +89,64 @@ void main() {
     );
   });
 
-  test('选择正确修改维度和 flags，条件控制路径', () {
-    final runtime = GameRuntime(pack);
-    var state = runtime.initialState();
-    expect(
-      runtime.availableActions(state).map((e) => e.id),
-      isNot(contains('probe-window')),
-    );
-    state = runtime.execute(state, 'signal-study');
-    expect(state.dimensionScores['理性决策'], 2);
-    expect(state.flags['decoded'], isTrue);
-    state = runtime.execute(state, 'ark-guide');
-    state = runtime.execute(state, 'colony-open');
-    expect(
-      runtime.availableActions(state).map((e) => e.id),
-      contains('probe-window'),
-    );
+  test('固定种子可复现随机路由，不同种子可进入不同事件', () {
+    final json = _loadJson('assets/content/core_pack.json');
+    final firstAction = (json['events'] as List).first['actions'][0];
+    firstAction['routes'] = [
+      {'eventId': 'ark', 'weight': 1, 'conditions': []},
+      {'eventId': 'colony', 'weight': 1, 'conditions': []},
+    ];
+    final pack = GameContentPack.fromJson(json);
+
+    String routeFor(int seed) => GameRuntime(pack)
+        .execute(GameRuntime(pack).initialState(seed), 'signal-study')
+        .currentEventId;
+
+    expect(routeFor(17), routeFor(17));
+    expect({
+      for (var seed = 1; seed <= 40; seed++) routeFor(seed),
+    }, hasLength(2));
   });
 
-  test('固定路径到达结局且人格匹配可重复', () {
-    final runtime = GameRuntime(pack);
-    var state = runtime.initialState();
+  test('分数效果遵守维度上下限', () {
+    final runtime = GameRuntime(santiPack);
+    var state = runtime.initialState(9);
+    for (var i = 0; i < 10; i++) {
+      state = runtime.executor.apply(state, const [
+        GameEffect(EffectType.addScore, 'threatCredibility', 30),
+      ], santiPack.dimensionsById);
+    }
+    expect(state.dimensionScores['threatCredibility'], 100);
+  });
+
+  test('santi 的故事级随机插曲可改变路径且每局都在配置范围内结束', () {
+    final visitedPaths = <String>{};
+    for (var seed = 1; seed <= 30; seed++) {
+      final runtime = GameRuntime(santiPack);
+      var state = runtime.initialState(seed);
+      final events = <String>[];
+      while (!state.completed) {
+        events.add(state.currentEventId);
+        final actions = runtime.availableActions(state);
+        expect(actions, isNotEmpty);
+        state = runtime.execute(state, actions.first.id);
+      }
+      expect(
+        state.choiceHistory.length,
+        inInclusiveRange(
+          santiPack.flowRules.minimumChoiceCount,
+          santiPack.flowRules.maximumChoiceCount,
+        ),
+      );
+      expect(state.endingId, isNotNull);
+      visitedPaths.add(events.join('>'));
+    }
+    expect(visitedPaths.length, greaterThan(1));
+  });
+
+  test('core 固定七次选择后由状态规则动态解析结局', () {
+    final runtime = GameRuntime(corePack);
+    var state = runtime.initialState(11);
     for (final action in [
       'signal-study',
       'ark-save',
@@ -120,26 +159,62 @@ void main() {
       state = runtime.execute(state, action);
     }
     expect(state.completed, isTrue);
+    expect(state.choiceHistory, hasLength(7));
     expect(state.endingId, 'dawn');
-    final matcher = ArchetypeMatcher();
-    final profile = TendencyProfile(state.dimensionScores);
-    expect(
-      matcher.match(profile, pack.archetypes).id,
-      matcher.match(profile, pack.archetypes).id,
-    );
   });
 
-  test('存档序列化与反序列化一致', () {
-    final state = GameRuntime(
-      pack,
-    ).execute(GameRuntime(pack).initialState(), 'signal-answer');
+  test('达到世界线最大选择次数时强制进入动态结局', () {
+    final json = _loadJson('assets/content/core_pack.json');
+    final rules = json['flowRules'] as Json;
+    rules['minimumChoiceCount'] = 1;
+    rules['maximumChoiceCount'] = 1;
+    final pack = GameContentPack.fromJson(json);
+    final runtime = GameRuntime(pack);
+    final state = runtime.execute(runtime.initialState(5), 'signal-study');
+    expect(state.completed, isTrue);
+    expect(state.choiceHistory, hasLength(1));
+    expect(state.endingId, 'embers');
+  });
+
+  test('复合条件支持 all、any、atLeast、not 和最高分匹配', () {
+    final state = GameRuntime(santiPack).initialState(3);
+    final evaluator = ConditionEvaluator();
+    final condition = GameCondition.fromJson({
+      'type': 'all',
+      'conditions': [
+        {'type': 'scoreAtLeast', 'key': 'humanityAnchor', 'value': 50},
+        {
+          'type': 'atLeast',
+          'minimumMatches': 1,
+          'conditions': [
+            {'type': 'flagEquals', 'key': 'autoProtocol', 'value': true},
+            {
+              'type': 'not',
+              'conditions': [
+                {'type': 'flagEquals', 'key': 'controlledLeak', 'value': true},
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    expect(evaluator.evaluate(condition, state), isTrue);
+  });
+
+  test('存档往返保留随机状态并可继续同一条路线', () {
+    final runtime = GameRuntime(corePack);
+    final state = runtime.execute(runtime.initialState(123), 'signal-answer');
     final restored = GameState.fromJson(
       jsonDecode(jsonEncode(state.toJson())) as Json,
     );
     expect(restored.toJson(), state.toJson());
+    expect(
+      runtime.execute(restored, 'ark-guide').toJson(),
+      runtime.execute(state, 'ark-guide').toJson(),
+    );
   });
 
-  test('协调器按 packId 选择内容包并隔离存档', () async {
+  test('协调器按 packId 选择内容包、隔离存档并注入随机种子', () async {
     const story = StoryDescriptor(
       packId: 'silent-tide',
       title: '测试故事',
@@ -149,12 +224,14 @@ void main() {
     final saves = _MemorySaveRepository();
     final coordinator = GameCoordinator(
       stories: const [story],
-      contentRepository: _MemoryContentRepository(pack),
+      contentRepository: _MemoryContentRepository(corePack),
       saveRepository: saves,
+      seedGenerator: _FixedSeedGenerator(42),
     );
     final session = await coordinator.selectStory('silent-tide');
     expect(session.story, same(story));
-    await coordinator.newGame();
+    final started = await coordinator.newGame();
+    expect(started.state!.randomState, 42);
     expect(saves.states.keys, contains('silent-tide'));
     expect(
       () => coordinator.selectStory('missing'),
@@ -163,22 +240,42 @@ void main() {
   });
 }
 
+GameContentPack _loadPack(String path) =>
+    GameContentPack.decode(File(path).readAsStringSync());
+
+Json _loadJson(String path) =>
+    jsonDecode(File(path).readAsStringSync()) as Json;
+
 class _MemoryContentRepository implements ContentPackRepository {
   _MemoryContentRepository(this.pack);
+
   final GameContentPack pack;
+
   @override
   Future<GameContentPack> load(StoryDescriptor story) async => pack;
 }
 
 class _MemorySaveRepository implements SaveRepository {
   final states = <String, GameState>{};
+
   @override
   Future<void> clear(String packId) async => states.remove(packId);
+
   @override
   Future<GameState?> load(String packId, String packVersion) async =>
       states[packId];
+
   @override
   Future<void> save(String packId, GameState state) async {
     states[packId] = state;
   }
+}
+
+class _FixedSeedGenerator implements SeedGenerator {
+  const _FixedSeedGenerator(this.seed);
+
+  final int seed;
+
+  @override
+  int nextSeed() => seed;
 }
