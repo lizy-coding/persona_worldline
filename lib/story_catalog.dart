@@ -8,4 +8,10 @@ const builtInStories = <StoryDescriptor>[
     summary: '在宇宙文明危机中连续决策，观察你最终抵达的人格世界线。',
     audienceTags: ['科幻', '文明抉择', '3–5 分钟'],
   ),
+  StoryDescriptor(
+    packId: 'santi',
+    title: '执剑人交界：未央评估',
+    summary: '在执剑人交接危机中评估威慑、人性与文明存续的边界。',
+    audienceTags: ['科幻', '动态结局', '4–8 次选择'],
+  ),
 ];
