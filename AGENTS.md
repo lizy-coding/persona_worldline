@@ -55,15 +55,19 @@ startEventId dimensions archetypes events endings
 
 `CONTENT-003 MUST` keep event and ending IDs globally unique inside a pack.
 
-`CONTENT-004 MUST` assign exactly one destination per action: valid `nextEventId` XOR valid `endingId`.
+`CONTENT-004 MUST` assign each action either one-or-more typed `routes` or `endsStory: true`, never both.
 
-`CONTENT-005 MUST` reject duplicate IDs, unknown types, unreachable events, events without exits, and paths without an ending.
+`CONTENT-005 MUST` reject duplicate IDs, unknown types, unreachable events, events without actions, invalid score references, and routes without valid targets.
 
-`CONTENT-005A MUST` define `flowRules.requiredChoiceCount` as positive integer and `flowRules.enforceEqualPathLength` as boolean.
+`CONTENT-005A MUST` define a positive `flowRules.minimumChoiceCount` and `maximumChoiceCount >= minimumChoiceCount`.
 
-`CONTENT-005B MUST` set `flowRules.enforceEqualPathLength: true` for standard story packs; every start-to-ending path MUST equal `requiredChoiceCount`.
+`CONTENT-005B MUST` define initial numeric values and bounds on every score dimension; visible dimensions are presentation metadata only.
 
-`CONTENT-005C MUST` reject event cycles and configured/actual path-length mismatch.
+`CONTENT-005C MUST` resolve endings through ordered typed `endingRules` ending with an unconditional fallback.
+
+`CONTENT-005D MUST` persist the deterministic random state and cap every run through `maximumChoiceCount`; cycles are allowed only because this cap guarantees termination.
+
+`CONTENT-005E MUST` define reusable story-level random diversions once in `flowRules.randomRoutes`; do not duplicate the same random rule across actions.
 
 `CONTENT-006 MUST` implement new action/condition/effect as typed model + parser diagnostic + executor/evaluator + tests.
 
@@ -71,7 +75,7 @@ startEventId dimensions archetypes events endings
 
 `CONTENT-008 MUST_NOT` use dynamic code execution, scripting language, or remote executable content.
 
-`CONTENT-009 SHOULD` implement new events, text, scores, flags, branches, archetypes, and endings through JSON only.
+`CONTENT-009 SHOULD` implement new events, text, initial scores, choice-count ranges, weighted routes, flags, branches, archetypes, and dynamic endings through JSON only.
 
 `CONTENT-010 MUST` format `assets/content/*.json` with 2-space indentation, one property per line, UTF-8, trailing newline, and no comments.
 
@@ -85,7 +89,7 @@ required_changes:
   - pubspec.yaml: flutter.assets
   - lib/story_catalog.dart: StoryDescriptor
   - lib/main.dart: AssetContentPackRepository asset map
-  - test: parse + fixed-path
+  - test: parse + seeded path + ending resolution
 forbidden_changes_without_new_rule_type:
   - lib/game/engine.dart
   - event/intro/result widgets

@@ -18,13 +18,26 @@ Home / Intro / Event / Result ◀── GameSession
               │                       │
               ▼                       ▼
         GameCoordinator → GameController ─────────▶ GameRuntime
-              │                  条件、效果、跳转
+              │              条件、效果、加权路由、动态结局
               ▼
         SaveRepository
 ```
 
 `GameContentPack` 是内容与程序之间唯一的正式契约。`GameState` 是运行时与存档之间的
 正式契约。保持这两个边界稳定，就可以独立演进故事内容、规则实现、UI 和存储实现。
+
+## 运行规则
+
+schema v3 把每条世界线的节奏和随机性放在内容包内：
+
+- 评分维度声明初始值、上下限和是否展示，角色可以拥有完全不同的初始状态。
+- `minimumChoiceCount` 与 `maximumChoiceCount` 定义单局长度；到达上限必然结算。
+- 行动的 `routes` 描述主线后继，多个合格目标按权重确定性抽取。
+- `flowRules.randomRoutes` 集中声明可复用的随机插曲，避免在每个行动内复制规则。
+- `endingRules` 按顺序匹配当前状态，最后一项必须是无条件兜底结局。
+- 随机状态保存在 `GameState`，相同内容、状态和种子必然产生相同后继事件。
+
+事件图允许循环，以支持回访、插曲和事件池；`maximumChoiceCount` 是保证每局终止的硬边界。
 
 ## 目录职责
 
@@ -44,12 +57,12 @@ Home / Intro / Event / Result ◀── GameSession
 第二条故事线应包含自己的 `packId`、`version`、维度、原型、事件和结局。推荐流程：
 
 1. 复制内容包的结构而不是业务代码。
-2. 更换所有内容 ID，完成起点和目的地引用。
-3. 为该内容包增加解析测试和至少一条完整可达路径测试。
+2. 配置角色初始维度、选择次数范围、路由和动态结局规则。
+3. 为该内容包增加解析测试、固定种子路径测试和结局规则测试。
 4. 在装配层登记资源映射，由 `ContentPackRepository` 加载选择结果。
 5. 按 `packId` 隔离存档，防止不同故事线互相覆盖。
 
-如果新故事只需要现有的选择、flag 和评分能力，到这里不应修改任何引擎代码。
+如果新故事只需要现有的选择、flag、复合条件、加权路由和评分能力，到这里不应修改任何引擎代码。
 
 ## 何时扩展引擎
 
@@ -59,7 +72,7 @@ Home / Intro / Event / Result ◀── GameSession
 
 ## 版本语义
 
-- `schemaVersion`：数据结构兼容性。升级后旧解析器可以拒绝并给出明确错误。
+- `schemaVersion`：数据结构版本。当前不提供旧内容协议兼容层。
 - `version`：单个内容包的内容版本。当前策略是不兼容时清除该包旧存档。
 - 应用版本：发布版本，不替代以上两个字段。
 

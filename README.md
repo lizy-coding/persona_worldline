@@ -1,12 +1,12 @@
 # 星海抉择（Persona Worldline）
 
-一个使用 Flutter 构建的短篇互动叙事 Demo。玩家将在“静默潮汐”引发的宇宙文明危机中连续作出抉择；选择会改变人格维度、剧情条件与最终结局，并生成对应的人格原型。
+一个使用 Flutter 构建的多世界线互动叙事 Demo。玩家会以不同身份进入独立故事；选择、初始属性和带权重的随机事件共同改变剧情路径、人格与动态结局。
 
 ## 当前内容
 
-- 约 3–5 分钟的单局体验，包含 7 个事件与 3 个结局
-- 5 个人格倾向维度与 4 种人格原型
-- 由 JSON 内容包驱动的事件、条件、效果和分支
+- “星海抉择”：固定 7 次选择，包含 7 个事件与 3 个结局
+- “执剑人交界”：4–8 次选择，包含 13 个事件与 10 个动态结局
+- 由 JSON 内容包驱动初始属性、复合条件、效果、随机插曲与结局优先级
 - 使用本地存储自动保存进度，刷新页面后可继续游戏
 - 内容包结构、分支执行、结局与存档序列化测试
 - 当前主要面向 Flutter Web，同时保留 Flutter 的跨平台扩展能力
@@ -74,6 +74,7 @@ https://lizy-coding.github.io/persona_worldline/
 
 ```text
 assets/content/core_pack.json  核心剧情、条件、效果、人格与结局数据
+assets/content/santi.json      执剑人交界世界线及其动态路由规则
 lib/game/models.dart           内容包与游戏状态模型、数据校验
 lib/game/engine.dart           条件判断、效果执行、分支和人格匹配
 lib/game/session.dart          故事协调、应用端口与游戏会话
@@ -96,17 +97,18 @@ AGENTS.md                      后续开发必须遵守的项目根级规则
 `lib/story_catalog.dart` 登记业务元数据、在应用装配层登记 Asset 映射。内容包使用
 `schemaVersion` 标记结构版本，由以下部分组成：
 
-- `dimensions`：人格评分维度
+- `dimensions`：评分维度、初始值、上下限及展示设置
 - `archetypes`：人格原型及其目标权重
 - `events`：剧情事件和玩家行动
-- `conditions`：行动显示条件
+- `conditions`：行动、事件、路由和结局的类型化复合条件
 - `effects`：分数或标记变更
 - `endings`：可达成的结局
 - `intro`：该故事线自己的序章展示内容
-- `flowRules.requiredChoiceCount`：每条完整路径要求的选择次数
-- `flowRules.enforceEqualPathLength`：是否强制所有分支以相同次数抵达结局
+- `flowRules.minimumChoiceCount` / `maximumChoiceCount`：该角色允许的单局选择次数范围
+- `flowRules.randomRoutes`：故事级、带条件和权重的随机插曲
+- `flowRules.endingRules`：按顺序匹配并带兜底项的动态结局规则
 
-每个行动必须且只能指定一个 `nextEventId` 或 `endingId`。运行时加载内容包时会检查重复 ID、无效目的地和不支持的数据类型；修改内容后请运行测试，避免产生不可达或中断的分支。
+每个行动必须选择配置 `routes` 或 `endsStory: true`。随机种子随存档保存，因此刷新后会继续同一局随机序列；到达最大选择次数时，运行时会根据当前状态强制解析动态结局。内容加载阶段会检查重复 ID、未知维度、无效路由和不支持的规则类型。
 
 ## 存档行为
 
