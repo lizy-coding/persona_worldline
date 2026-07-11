@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1, "packId": "silent-tide", "version": "1.0.0", "title": "星海抉择", "startEventId": "signal",
+  "dimensions": ["文明责任", "理性决策", "风险偏好", "道德边界", "威慑倾向"],
+  "archetypes": [
+    {"id":"guardian","name":"群星守望者","description":"你把文明共同体置于个人得失之上，愿意承担守护的代价。","weights":{"文明责任":5,"理性决策":2,"风险偏好":0,"道德边界":4,"威慑倾向":-2}},
+    {"id":"strategist","name":"冷静航路师","description":"你相信信息、秩序和可验证的方案，是穿越危机最可靠的坐标。","weights":{"文明责任":2,"理性决策":5,"风险偏好":-1,"道德边界":1,"威慑倾向":1}},
+    {"id":"pioneer","name":"边界开拓者","description":"你愿意踏入未知，用主动行动为文明争取新的可能。","weights":{"文明责任":1,"理性决策":1,"风险偏好":5,"道德边界":0,"威慑倾向":2}},
+    {"id":"sentinel","name":"钢铁哨兵","description":"你把生存视为首要责任，并以明确力量阻止威胁靠近。","weights":{"文明责任":2,"理性决策":1,"风险偏好":2,"道德边界":-3,"威慑倾向":5}}
+  ],
+  "events": [
+    {"id":"signal","chapter":1,"title":"来自黑暗的脉冲","description":"静默潮汐中出现一组人工脉冲。它也许是求救，也许是诱饵。科研组要求开放阵列，防务组主张保持无线电静默。","conditions":[],"actions":[
+      {"id":"signal-study","type":"selectOption","text":"隔离阵列，先解析信号","conditions":[],"effects":[{"type":"addScore","key":"理性决策","value":2},{"type":"setFlag","key":"decoded","value":true}],"nextEventId":"ark"},
+      {"id":"signal-answer","type":"selectOption","text":"主动回应，表明和平意图","conditions":[],"effects":[{"type":"addScore","key":"风险偏好","value":2},{"type":"addScore","key":"道德边界","value":1},{"type":"setFlag","key":"answered","value":true}],"nextEventId":"ark"},
+      {"id":"signal-silence","type":"selectOption","text":"维持静默并进入防御姿态","conditions":[],"effects":[{"type":"addScore","key":"威慑倾向","value":2}],"nextEventId":"ark"}
+    ]},
+    {"id":"ark","chapter":1,"title":"方舟偏航","description":"载有两万名冬眠者的“晨钟号”失去导航。修正它需要占用最后一条稳定量子链，三个殖民地将暂时失去预警。","conditions":[],"actions":[
+      {"id":"ark-save","type":"selectOption","text":"调集量子链救援方舟","conditions":[],"effects":[{"type":"addScore","key":"文明责任","value":2},{"type":"addScore","key":"风险偏好","value":1},{"type":"setFlag","key":"arkSaved","value":true}],"nextEventId":"colony"},
+      {"id":"ark-guide","type":"selectOption","text":"发送低带宽航线，让方舟自行修正","conditions":[],"effects":[{"type":"addScore","key":"理性决策","value":2}],"nextEventId":"colony"}
+    ]},
+    {"id":"colony","chapter":2,"title":"三城配额","description":"能源只能让两座殖民城完整撑过潮汐。第三座城请求你隐瞒缺口，以免撤离引发骚乱。","conditions":[],"actions":[
+      {"id":"colony-open","type":"selectOption","text":"公开缺口，组织公平抽签撤离","conditions":[],"effects":[{"type":"addScore","key":"道德边界","value":2},{"type":"addScore","key":"文明责任","value":1},{"type":"setFlag","key":"transparent","value":true}],"nextEventId":"probe"},
+      {"id":"colony-priority","type":"selectOption","text":"优先保全科研与生产节点","conditions":[],"effects":[{"type":"addScore","key":"理性决策","value":2},{"type":"addScore","key":"道德边界","value":-2}],"nextEventId":"probe"}
+    ]},
+    {"id":"probe","chapter":2,"title":"潮汐之眼","description":"一艘无人探针可以深入异常核心。若此前解析了信号，它能沿安全窗口抵达；否则只能进行一次高风险跃迁。","conditions":[],"actions":[
+      {"id":"probe-window","type":"selectOption","text":"利用解析结果进入安全窗口","conditions":[{"type":"flagEquals","key":"decoded","value":true}],"effects":[{"type":"addScore","key":"理性决策","value":2},{"type":"setFlag","key":"coreKnown","value":true}],"nextEventId":"visitor"},
+      {"id":"probe-jump","type":"selectOption","text":"授权探针高风险跃迁","conditions":[],"effects":[{"type":"addScore","key":"风险偏好","value":2},{"type":"setFlag","key":"coreKnown","value":true}],"nextEventId":"visitor"},
+      {"id":"probe-hold","type":"selectOption","text":"保留探针，强化本地预警","conditions":[],"effects":[{"type":"addScore","key":"文明责任","value":1},{"type":"addScore","key":"风险偏好","value":-1}],"nextEventId":"visitor"}
+    ]},
+    {"id":"visitor","chapter":3,"title":"镜面来客","description":"未知舰体出现在航路边缘。它复制了你的第一条广播，并请求共享星图。防务舰队等待命令。","conditions":[],"actions":[
+      {"id":"visitor-share","type":"selectOption","text":"共享裁剪后的星图，建立互信","conditions":[],"effects":[{"type":"addScore","key":"道德边界","value":2},{"type":"addScore","key":"风险偏好","value":1},{"type":"setFlag","key":"contact","value":true}],"nextEventId":"council"},
+      {"id":"visitor-line","type":"selectOption","text":"划定禁区，以舰队展示底线","conditions":[],"effects":[{"type":"addScore","key":"威慑倾向","value":3}],"nextEventId":"council"}
+    ]},
+    {"id":"council","chapter":3,"title":"最后议案","description":"潮汐即将抵达峰值。议会分裂为两派：联合所有能源启动覆盖全域的共振盾，或集中能源维持核心航路。","conditions":[],"actions":[
+      {"id":"council-shield","type":"selectOption","text":"启动共振盾，共担成败","conditions":[],"effects":[{"type":"addScore","key":"文明责任","value":3},{"type":"addScore","key":"风险偏好","value":1}],"nextEventId":"final"},
+      {"id":"council-route","type":"selectOption","text":"保住核心航路，接受边缘损失","conditions":[],"effects":[{"type":"addScore","key":"理性决策","value":2},{"type":"addScore","key":"道德边界","value":-2}],"nextEventId":"final"}
+    ]},
+    {"id":"final","chapter":3,"title":"潮汐降临","description":"所有频道化为白光。你还有一次决定：释放全部储能发出协同脉冲，或封闭系统，让各城独自穿越黑暗。","conditions":[],"actions":[
+      {"id":"final-unite","type":"selectOption","text":"释放协同脉冲","conditions":[{"type":"scoreAtLeast","key":"文明责任","value":2}],"effects":[{"type":"addScore","key":"文明责任","value":2}],"endingId":"dawn"},
+      {"id":"final-contact","type":"selectOption","text":"让镜面来客加入脉冲","conditions":[{"type":"flagEquals","key":"contact","value":true}],"effects":[{"type":"addScore","key":"风险偏好","value":2},{"type":"addScore","key":"道德边界","value":1}],"endingId":"bridge"},
+      {"id":"final-seal","type":"selectOption","text":"封闭系统，守住现有火种","conditions":[],"effects":[{"type":"addScore","key":"威慑倾向","value":2}],"endingId":"embers"}
+    ]}
+  ],
+  "endings": [
+    {"id":"dawn","title":"共同黎明","summary":"共振跨过每一座城市，分散的文明第一次像一个整体回应宇宙。潮汐退去时，航路仍在。"},
+    {"id":"bridge","title":"群星之桥","summary":"两个文明的脉冲在黑暗中叠合。你们没有消灭未知，而是为未知建立了第一座桥。"},
+    {"id":"embers","title":"沉默火种","summary":"封闭系统保住了核心聚落，远方却永久失联。文明活了下来，也记住了这次沉默的代价。"}
+  ]
+}
