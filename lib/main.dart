@@ -331,7 +331,7 @@ class EventPage extends StatelessWidget {
         LinearProgressIndicator(
           value:
               ((state.choiceHistory.length + 1) /
-                      session.pack.expectedTaskCount)
+                      session.pack.flowRules.requiredChoiceCount)
                   .clamp(0, 1),
         ),
         const SizedBox(height: 28),

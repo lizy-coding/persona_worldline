@@ -152,6 +152,20 @@ class StoryDescriptor {
   final List<String> audienceTags;
 }
 
+class FlowRules {
+  const FlowRules({
+    required this.requiredChoiceCount,
+    required this.enforceEqualPathLength,
+  });
+  final int requiredChoiceCount;
+  final bool enforceEqualPathLength;
+
+  factory FlowRules.fromJson(Json j) => FlowRules(
+    requiredChoiceCount: j['requiredChoiceCount'] as int,
+    enforceEqualPathLength: j['enforceEqualPathLength'] as bool,
+  );
+}
+
 class GameContentPack {
   const GameContentPack({
     required this.schemaVersion,
@@ -160,7 +174,7 @@ class GameContentPack {
     required this.title,
     required this.summary,
     required this.intro,
-    required this.expectedTaskCount,
+    required this.flowRules,
     required this.startEventId,
     required this.dimensions,
     required this.archetypes,
@@ -170,7 +184,7 @@ class GameContentPack {
   final int schemaVersion;
   final String packId, version, title, summary, startEventId;
   final StoryIntro intro;
-  final int expectedTaskCount;
+  final FlowRules flowRules;
   final List<String> dimensions;
   final List<Archetype> archetypes;
   final Map<String, GameEvent> events;
@@ -186,7 +200,7 @@ class GameContentPack {
       title: j['title'] as String,
       summary: j['summary'] as String,
       intro: StoryIntro.fromJson(j['intro'] as Json),
-      expectedTaskCount: j['expectedTaskCount'] as int,
+      flowRules: FlowRules.fromJson(j['flowRules'] as Json),
       startEventId: j['startEventId'] as String,
       dimensions: List<String>.from(j['dimensions'] as List),
       archetypes: _list(j['archetypes'], Archetype.fromJson),
@@ -201,7 +215,10 @@ class GameContentPack {
       GameContentPack.fromJson(jsonDecode(source) as Json);
 
   void validate(int eventCount, int endingCount) {
-    if (schemaVersion != 1) throw const FormatException('不支持的内容 schemaVersion');
+    if (schemaVersion != 2) throw const FormatException('不支持的内容 schemaVersion');
+    if (flowRules.requiredChoiceCount <= 0) {
+      throw const FormatException('requiredChoiceCount 必须大于 0');
+    }
     if (events.length != eventCount || endings.length != endingCount) {
       throw const FormatException('事件或结局 ID 重复');
     }
@@ -252,23 +269,36 @@ class GameContentPack {
       throw FormatException('存在不可达事件: ${unreachable.join(', ')}');
     }
 
-    final resolving = <String>{};
-    final resolved = <String>{};
-    bool canReachEnding(String eventId) {
-      if (resolved.contains(eventId)) return true;
-      if (!resolving.add(eventId)) return false;
-      final result = events[eventId]!.actions.cast<SelectOptionAction>().any(
-        (action) =>
-            action.endingId != null || canReachEnding(action.nextEventId!),
-      );
-      resolving.remove(eventId);
-      if (result) resolved.add(eventId);
-      return result;
+    Set<int> pathLengths(String eventId, Set<String> visiting) {
+      if (!visiting.add(eventId)) {
+        throw FormatException('事件图存在循环: $eventId');
+      }
+      final lengths = <int>{};
+      for (final action
+          in events[eventId]!.actions.cast<SelectOptionAction>()) {
+        if (action.endingId != null) {
+          lengths.add(1);
+        } else {
+          lengths.addAll(
+            pathLengths(
+              action.nextEventId!,
+              visiting,
+            ).map((length) => length + 1),
+          );
+        }
+      }
+      visiting.remove(eventId);
+      return lengths;
     }
 
-    final trapped = events.keys.where((id) => !canReachEnding(id));
-    if (trapped.isNotEmpty) {
-      throw FormatException('事件无法抵达结局: ${trapped.join(', ')}');
+    final lengths = pathLengths(startEventId, <String>{});
+    if (flowRules.enforceEqualPathLength &&
+        (lengths.length != 1 ||
+            lengths.single != flowRules.requiredChoiceCount)) {
+      throw FormatException(
+        '选择次数不符合 flowRules: 实际路径 ${lengths.toList()..sort()}，'
+        '要求 ${flowRules.requiredChoiceCount}',
+      );
     }
   }
 }

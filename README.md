@@ -103,7 +103,8 @@ AGENTS.md                      后续开发必须遵守的项目根级规则
 - `effects`：分数或标记变更
 - `endings`：可达成的结局
 - `intro`：该故事线自己的序章展示内容
-- `expectedTaskCount`：用于通用进度展示的预期单局任务数
+- `flowRules.requiredChoiceCount`：每条完整路径要求的选择次数
+- `flowRules.enforceEqualPathLength`：是否强制所有分支以相同次数抵达结局
 
 每个行动必须且只能指定一个 `nextEventId` 或 `endingId`。运行时加载内容包时会检查重复 ID、无效目的地和不支持的数据类型；修改内容后请运行测试，避免产生不可达或中断的分支。
 

@@ -45,7 +45,7 @@ JSON -> Infrastructure(ContentPackRepository) -> Models
 Required pack fields:
 
 ```text
-schemaVersion packId version title summary intro expectedTaskCount
+schemaVersion packId version title summary intro flowRules
 startEventId dimensions archetypes events endings
 ```
 
@@ -59,6 +59,12 @@ startEventId dimensions archetypes events endings
 
 `CONTENT-005 MUST` reject duplicate IDs, unknown types, unreachable events, events without exits, and paths without an ending.
 
+`CONTENT-005A MUST` define `flowRules.requiredChoiceCount` as positive integer and `flowRules.enforceEqualPathLength` as boolean.
+
+`CONTENT-005B MUST` set `flowRules.enforceEqualPathLength: true` for standard story packs; every start-to-ending path MUST equal `requiredChoiceCount`.
+
+`CONTENT-005C MUST` reject event cycles and configured/actual path-length mismatch.
+
 `CONTENT-006 MUST` implement new action/condition/effect as typed model + parser diagnostic + executor/evaluator + tests.
 
 `CONTENT-007 MUST_NOT` silently ignore unknown action/condition/effect types.
@@ -66,6 +72,10 @@ startEventId dimensions archetypes events endings
 `CONTENT-008 MUST_NOT` use dynamic code execution, scripting language, or remote executable content.
 
 `CONTENT-009 SHOULD` implement new events, text, scores, flags, branches, archetypes, and endings through JSON only.
+
+`CONTENT-010 MUST` format `assets/content/*.json` with 2-space indentation, one property per line, UTF-8, trailing newline, and no comments.
+
+Canonical example: `assets/content/core_pack.json`.
 
 ## ADD STORY
 

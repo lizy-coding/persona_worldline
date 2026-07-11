@@ -17,7 +17,9 @@ void main() {
     expect(pack.endings.length, greaterThanOrEqualTo(2));
     expect(pack.dimensions, hasLength(5));
     expect(pack.intro.title, isNotEmpty);
-    expect(pack.expectedTaskCount, 7);
+    expect(pack.schemaVersion, 2);
+    expect(pack.flowRules.requiredChoiceCount, 7);
+    expect(pack.flowRules.enforceEqualPathLength, isTrue);
   });
 
   test('无效 nextEventId 会被检测', () {
@@ -52,6 +54,17 @@ void main() {
     expect(
       () => GameContentPack.fromJson(json),
       throwsA(predicate((error) => '$error'.contains('不可达事件'))),
+    );
+  });
+
+  test('配置的选择次数与所有结局路径一致', () {
+    final json =
+        jsonDecode(File('assets/content/core_pack.json').readAsStringSync())
+            as Json;
+    (json['flowRules'] as Json)['requiredChoiceCount'] = 6;
+    expect(
+      () => GameContentPack.fromJson(json),
+      throwsA(predicate((error) => '$error'.contains('选择次数不符合'))),
     );
   });
 
