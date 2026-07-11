@@ -62,15 +62,25 @@ flutter test
 assets/content/core_pack.json  核心剧情、条件、效果、人格与结局数据
 lib/game/models.dart           内容包与游戏状态模型、数据校验
 lib/game/engine.dart           条件判断、效果执行、分支和人格匹配
-lib/game/session.dart          内容加载、存档仓库与游戏会话
+lib/game/session.dart          故事协调、应用端口与游戏会话
+lib/game/infrastructure.dart   Asset 内容加载与 Web 本地存档实现
+lib/story_catalog.dart         可选故事线业务目录
 lib/main.dart                  Flutter 界面、页面流转与状态接入
 test/game_test.dart            内容包和核心引擎测试
 web/                           Web 入口、图标与 PWA 清单
+docs/ARCHITECTURE.md           架构边界、故事线切换与版本演进说明
+AGENTS.md                      后续开发必须遵守的项目根级规则
 ```
+
+详细的依赖方向、模块职责和多故事线扩展步骤见
+[架构与演进说明](docs/ARCHITECTURE.md)。自动化开发工具及后续贡献者还必须遵守
+[项目规则](AGENTS.md)，避免把故事专属逻辑写入通用引擎或页面。
 
 ## 内容包说明
 
-剧情内容集中在 `assets/content/core_pack.json`。内容包使用 `schemaVersion` 标记结构版本，由以下部分组成：
+每条故事线对应 `assets/content/` 下的一个完整内容包，并通过
+`lib/story_catalog.dart` 登记业务元数据、在应用装配层登记 Asset 映射。内容包使用
+`schemaVersion` 标记结构版本，由以下部分组成：
 
 - `dimensions`：人格评分维度
 - `archetypes`：人格原型及其目标权重
@@ -78,6 +88,8 @@ web/                           Web 入口、图标与 PWA 清单
 - `conditions`：行动显示条件
 - `effects`：分数或标记变更
 - `endings`：可达成的结局
+- `intro`：该故事线自己的序章展示内容
+- `expectedTaskCount`：用于通用进度展示的预期单局任务数
 
 每个行动必须且只能指定一个 `nextEventId` 或 `endingId`。运行时加载内容包时会检查重复 ID、无效目的地和不支持的数据类型；修改内容后请运行测试，避免产生不可达或中断的分支。
 
