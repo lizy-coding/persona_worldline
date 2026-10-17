@@ -16,7 +16,7 @@ https://lizy-coding.github.io/persona_worldline/
 
 ## 一键发布
 
-自动：提交并推送到 `master`。
+自动：已授权的 PR 合入或提交推送到 `master`。普通维护先在任务分支提交 PR，通过 Quality 检查后再按授权合入。
 
 ```bash
 git push origin master
@@ -42,3 +42,10 @@ git revert <commit>
 git push origin master
 ```
 
+
+
+## PR 与发布验证
+
+Quality 工作流对面向 master 的 PR 执行共享检查和 Web 构建；它不部署站点。Pages 的 Verify source and story contracts 步骤调用同一 tool/check.sh，工具链统一为 Flutter 3.47.2。
+
+推送任务分支与打开 PR 后，应先报告 CI 状态。只有 master 对应部署实际成功后，才报告网站已更新。

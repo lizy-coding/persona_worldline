@@ -70,3 +70,6 @@ local.properties
 reports/
 screenshots/
 *.trace
+
+# Personal assistant plans, task receipts and skills stay local.
+.hermes/
