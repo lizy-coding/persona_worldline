@@ -1,0 +1,1440 @@
+{
+  "schemaVersion": 3,
+  "packId": "mulberry-county",
+  "version": "1.0.0",
+  "title": "桑田秋账·执行者",
+  "summary": "地方执行层：田界、县印与三本互不相认的账。",
+  "intro": {
+    "title": "序章：知县周守衡",
+    "body": "你接下临溪县印的第十七日，府文和乡呈同时到了。文书写“劝桑”，期限写“必办”；田图上只有亩数，街上却每一户都有自己的饥饱。督办陆承简要你妥办，商人顾廷章要一个准信，叶青娘想知道县印会保护谁。\n\n本线独立推演七次关键抉择。与另两条线共享人物与危机，各自选择不会改写其他角色的存档。",
+    "buttonText": "翻开这一季的账"
+  },
+  "flowRules": {
+    "minimumChoiceCount": 7,
+    "maximumChoiceCount": 7,
+    "initialFlags": {
+      "paddy_reserved": false,
+      "rushed": false,
+      "joint_measure": false,
+      "receipt_rule": false,
+      "public_notice": false,
+      "public_loan": false,
+      "public_ledger": false,
+      "filed_appeal": false,
+      "cooked_ledger": false,
+      "resigned": false
+    },
+    "endingRules": [
+      {
+        "endingId": "mulberry-county-scattered",
+        "conditions": [
+          {
+            "type": "any",
+            "conditions": [
+              {
+                "type": "scoreAtMost",
+                "key": "grain",
+                "value": 10
+              },
+              {
+                "type": "scoreAtMost",
+                "key": "trust",
+                "value": 10
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-county-clean_copy",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "cooked_ledger",
+            "value": true
+          },
+          {
+            "type": "scoreAtMost",
+            "key": "evidence",
+            "value": 35
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-county-paddy_owner",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "public_ledger",
+            "value": true
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "paddy",
+            "value": 60
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "grain",
+            "value": 50
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-county-county_witness",
+        "conditions": [
+          {
+            "type": "scoreAtLeast",
+            "key": "evidence",
+            "value": 60
+          },
+          {
+            "type": "flagEquals",
+            "key": "filed_appeal",
+            "value": true
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-county-return_seal",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "resigned",
+            "value": true
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "trust",
+            "value": 40
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-county-ordered_silk",
+        "conditions": [
+          {
+            "type": "scoreAtLeast",
+            "key": "upper",
+            "value": 70
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "cash",
+            "value": 45
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-county-winter_seed",
+        "conditions": []
+      }
+    ],
+    "randomRoutes": []
+  },
+  "startEventId": "mulberry-county-letters",
+  "dimensions": [
+    {
+      "id": "grain",
+      "label": "存粮与粮路",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 45,
+      "visible": true
+    },
+    {
+      "id": "cash",
+      "label": "县库余银",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 35,
+      "visible": true
+    },
+    {
+      "id": "trust",
+      "label": "民间信任",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 40,
+      "visible": true
+    },
+    {
+      "id": "upper",
+      "label": "上峰信任",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 50,
+      "visible": true
+    },
+    {
+      "id": "paddy",
+      "label": "口粮田保障",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 45,
+      "visible": true
+    },
+    {
+      "id": "evidence",
+      "label": "案证完整",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "care",
+      "label": "护生之心",
+      "minimum": -20,
+      "maximum": 20,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "courage",
+      "label": "担责之勇",
+      "minimum": -20,
+      "maximum": 20,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "craft",
+      "label": "周旋之术",
+      "minimum": -20,
+      "maximum": 20,
+      "initialValue": 0,
+      "visible": false
+    }
+  ],
+  "archetypes": [
+    {
+      "id": "keeper",
+      "name": "守灯人",
+      "description": "你先看见具体的人，再设法替他们留下可以延续的生活。",
+      "weights": {
+        "care": 10,
+        "courage": 4,
+        "craft": 2
+      }
+    },
+    {
+      "id": "witness",
+      "name": "留证者",
+      "description": "你相信一纸能够核对的凭据，胜过当下最响亮的保证。",
+      "weights": {
+        "care": 4,
+        "courage": 10,
+        "craft": 2
+      }
+    },
+    {
+      "id": "broker",
+      "name": "摆渡人",
+      "description": "你在不能尽如人意的条件里周旋，争取下一次选择的余地。",
+      "weights": {
+        "care": 3,
+        "courage": 2,
+        "craft": 10
+      }
+    },
+    {
+      "id": "survivor",
+      "name": "过关人",
+      "description": "你首先设法渡过眼前这一关，也必须面对被推迟的代价。",
+      "weights": {
+        "care": 0,
+        "courage": 0,
+        "craft": 1
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "mulberry-county-letters",
+      "chapter": 1,
+      "title": "案上的两封文书",
+      "description": "你是临溪知县周守衡，接印才十七日。一封府文催报改桑亩数，一封乡呈请求留下口粮田。文书用的是“劝”字，期限却写得不能商量。你让人把田图铺开，发现地图上的方格并不区分高田、低田，也不标一家人靠哪一块地吃饭。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-county-letters-reserve",
+          "type": "selectOption",
+          "text": "先圈出口粮田，再画改桑界线",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "paddy_reserved",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-ledgers",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-letters-assign",
+          "type": "selectOption",
+          "text": "依各里田亩摊派数额，限期报改",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-ledgers",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-letters-discuss",
+          "type": "selectOption",
+          "text": "召各里公议试办，先缓一轮追比",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-ledgers",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-county-ledgers",
+      "chapter": 2,
+      "title": "账房里的三本册",
+      "description": "粮册说仓里尚足，田册说百姓愿改，银册说桑本已领。吴书吏将三本册分别收进三个匣子，熟练得让你心里发凉。案角压着叶青娘的一张诉纸：同一户人，在三本册上竟有三个不同的欠数。明日，你必须亲自去一处。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-county-ledgers-copy",
+          "type": "selectOption",
+          "text": "抄下原契和经手银数，带人去石桥圩复丈",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-measure",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-ledgers-merchant",
+          "type": "selectOption",
+          "text": "请顾廷章垫付周转银，当面核对农户契纸",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -3
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-contract",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-ledgers-report",
+          "type": "selectOption",
+          "text": "先把完成亩数报出，再去收理佃户异议",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            },
+            {
+              "type": "setFlag",
+              "key": "rushed",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-contract",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-county-measure",
+      "chapter": 3,
+      "title": "圩田上的两把尺",
+      "description": "里正量的是田契亩数，老农指的是常年积水线。两把尺都没有错，错在把能插稻的低田，当成了栽桑后也能立刻受益的田。有人提醒你：把这些田退出改桑，县里的成数就不好看了。雨水正在鞋面上慢慢聚起来。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-county-measure-soil",
+          "type": "selectOption",
+          "text": "按土质水位退回不宜种桑的田",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-granary",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-measure-pending",
+          "type": "selectOption",
+          "text": "把争议亩数单列，约定秋后公开复丈",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "joint_measure",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-granary",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-measure-replace",
+          "type": "selectOption",
+          "text": "准用验清产权的族田抵数，不再压到原佃户",
+          "conditions": [
+            {
+              "type": "scoreAtLeast",
+              "key": "evidence",
+              "value": 20
+            }
+          ],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-granary",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-county-contract",
+      "chapter": 3,
+      "title": "借桑本的最后两行",
+      "description": "顾廷章没有否认风险。他说，若农户能随时反悔，商人就不会先垫银。叶青娘指着最后两行问：没养成的蚕算谁的，没到户的粮算谁的？你发现，县印正是这份合同里唯一没有写明责任的东西。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-county-contract-clauses",
+          "type": "selectOption",
+          "text": "补入缓偿、保价与到粮期限，并写清追偿对象",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 1
+            },
+            {
+              "type": "setFlag",
+              "key": "receipt_rule",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-granary",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-contract-advance",
+          "type": "selectOption",
+          "text": "先领现银，按约定交桑日期追缴",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-granary",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-contract-read",
+          "type": "selectOption",
+          "text": "逐户读明契纸，自愿签押，各执一份",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 1
+            },
+            {
+              "type": "setFlag",
+              "key": "public_notice",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-granary",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-county-granary",
+      "chapter": 4,
+      "title": "雨夜，仓门内外",
+      "description": "石桥圩告急。壮丁要去守堤，家里却有人等米下锅。开仓须留凭据，借粮须有担保，而上一次的领粮簿尚未核清。吴书吏提醒你，印一落，缺口便是知县的缺口。门外传来一阵雨声，又一阵人声。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-county-granary-open",
+          "type": "selectOption",
+          "text": "按户放急粮，另设领粮簿留存副本",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": -20
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-reply",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-granary-guard",
+          "type": "selectOption",
+          "text": "守住县仓，先调人保大路",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-reply",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-granary-borrow",
+          "type": "selectOption",
+          "text": "以县印借商粮，借还日期公开张榜",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "public_loan",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-reply",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-county-reply",
+      "chapter": 5,
+      "title": "来迟的公文",
+      "description": "督办的回文终于到了。第一页仍催解银，第二页却留有保粮展限的例外。里正说只按第一页办最省事，商人说停一里便会引来十里效仿。你能引用那条例外，但必须把少收的银、少改的田，逐项写到自己名下。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-county-reply-exception",
+          "type": "selectOption",
+          "text": "据保粮例停催一里，把实数原样回报",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "public_ledger",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-witness",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-reply-collect",
+          "type": "selectOption",
+          "text": "照期催办，将未改田户列入追比册",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-witness",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-reply-delay",
+          "type": "selectOption",
+          "text": "争取一月展限，私下筹齐眼前银粮",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-witness",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-county-witness",
+      "chapter": 6,
+      "title": "证人不肯坐下",
+      "description": "叶青娘带着副契来县里，却不肯坐到写供词的案前。她问的是，作证后还能不能回去租田。吴书吏建议找几个经手人赔银，把事情止在这里。你知道，无人敢再说话的案子，未必比无人肯认错的案子更清楚。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-county-witness-appeal",
+          "type": "selectOption",
+          "text": "留证词副本，向府里申请会勘",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "filed_appeal",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-inspection",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-witness-settle",
+          "type": "selectOption",
+          "text": "让经手人与乡约私了，不再扩大追究",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": -20
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "cooked_ledger",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-inspection",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-county-witness-protect",
+          "type": "selectOption",
+          "text": "记录粮与田的实数，不把求粮人列作案犯",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "paddy",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "public_ledger",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-county-inspection",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-county-inspection",
+      "chapter": 7,
+      "title": "秋验，要交哪一本账",
+      "description": "验册的差官已经到了驿站。三本册终于能互相对上，只是有些数字会让你失去这顶乌纱。屋外有人送来一小包稻种，说不是谢礼，是请县里替明年留个底。差官敲门时，你把手放在了县印旁边。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-county-inspection-truth",
+          "type": "selectOption",
+          "text": "交三本真册，把自己用印的责任也写进去",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "public_ledger",
+              "value": true
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "mulberry-county-inspection-finish",
+          "type": "selectOption",
+          "text": "依成数交差，将欠粮另列为来年借项",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "cash",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "cooked_ledger",
+              "value": true
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "mulberry-county-inspection-resign",
+          "type": "selectOption",
+          "text": "请求解印，将赈册、原契与证词封存",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "upper",
+              "value": -25
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "resigned",
+              "value": true
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "id": "mulberry-county-scattered",
+      "title": "一县流离",
+      "summary": "县印还在，来报户口的人却少了。关紧的仓门和及时递出的成数，都没能留下那些已经挑担离乡的人。追比册翻过一页又一页，缺额反而更大。你第一次发现，公文上的一县仍旧完整，生活里的一县却可以在无人宣布时散掉。"
+    },
+    {
+      "id": "mulberry-county-clean_copy",
+      "title": "清册无声",
+      "summary": "誊清的账顺利过验，几个差错被各自消化。你在任上留了下来，却知道哪些名字从册中消失了。村里以后可能更听话，也可能只是学会不再把真话送到县衙。明年的第一张诉纸到来时，你会再次面对同一件事：能否容下账外的人。"
+    },
+    {
+      "id": "mulberry-county-paddy_owner",
+      "title": "圩田有主",
+      "summary": "公开的粮册、田界和责任终于能互相核对。被留作口粮田的地，有了不随经手人改口的凭据。你没有完成所有改桑数额，县库也谈不上富足；但石桥圩的田主、佃户和来验的人，至少开始用同一把尺说话。稻秧仍得自己长，下一季仍需看天。"
+    },
+    {
+      "id": "mulberry-county-county_witness",
+      "title": "一县作证",
+      "summary": "会勘的人带走了真册，你也被列为需要说明用印经过的人。叶青娘没有因此变成可以随意传唤的证据，村中几户各自留着副本。案子尚未判，冬粮还要筹；但第一次有人能够把县衙、商馆与圩田里发生的事，放在同一天的日期之下核对。"
+    },
+    {
+      "id": "mulberry-county-return_seal",
+      "title": "解印归田",
+      "summary": "你交出了县印，没有把未平的粮账一并烧掉。留下的人未必会赞同你，也仍要面对租约和催解。临行时，送稻种的人只问副契放在哪里，没有问你是不是清官。你指给他看：原契在封匣，副本在各户，账上也留了自己的名字。"
+    },
+    {
+      "id": "mulberry-county-ordered_silk",
+      "title": "奉命成桑",
+      "summary": "改桑成数与县库银数都过了验，你得到一句“干练”。一些农户靠旧桑与工钱接上了生计，另一些人则把口粮田和来年工期押进契里。你证明了命令能够完成，却还没有证明每个完成它的人都能活得更稳。下次展限申请送来时，县印会比从前更沉。"
+    },
+    {
+      "id": "mulberry-county-winter_seed",
+      "title": "留种过冬",
+      "summary": "你既没能把缺口彻底查清，也没让一县只剩一张好看的报表。零碎的展限、借粮和田界复核拼出一个能过冬的安排。它经不起被叫作长治久安，却给下一季留下稻种，也留下继续算账的人。你知道，明年不能再把“另议”当成结案。"
+    }
+  ]
+}

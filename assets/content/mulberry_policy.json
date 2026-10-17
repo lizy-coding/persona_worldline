@@ -1,0 +1,1431 @@
+{
+  "schemaVersion": 3,
+  "packId": "mulberry-policy",
+  "version": "1.0.0",
+  "title": "桑田秋账·施政者",
+  "summary": "政策施行层：财政、考成与保粮底线。",
+  "intro": {
+    "title": "序章：督办官陆承简",
+    "body": "春水才漫过田塍，县衙的朱印先落进了泥里。你是受命督办改桑的陆承简。上头催银，地方报亩，商人谈的是来年丝价，百姓等的是今夜口粮。你有权写下一条办法，也可能只能从报表里认识承受它的人。\n\n本线独立推演七次关键抉择。背景取明代江南桑稻争田，人物、县名与具体政令均为原创虚构。",
+    "buttonText": "翻开这一季的账"
+  },
+  "flowRules": {
+    "minimumChoiceCount": 7,
+    "maximumChoiceCount": 7,
+    "initialFlags": {
+      "food_floor": false,
+      "merchant_guarantee": false,
+      "paper_trust": false,
+      "petition": false,
+      "joint_guarantee": false,
+      "forward_sale": false,
+      "joint_review": false,
+      "quiet_settlement": false,
+      "public_report": false,
+      "falsified": false,
+      "sacrifice": false
+    },
+    "endingRules": [
+      {
+        "endingId": "mulberry-policy-empty_granary",
+        "conditions": [
+          {
+            "type": "scoreAtMost",
+            "key": "grain",
+            "value": 15
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-policy-paper_success",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "falsified",
+            "value": true
+          },
+          {
+            "type": "scoreAtMost",
+            "key": "evidence",
+            "value": 35
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-policy-grain_clause",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "food_floor",
+            "value": true
+          },
+          {
+            "type": "flagEquals",
+            "key": "public_report",
+            "value": true
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "grain",
+            "value": 55
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "treasury",
+            "value": 5
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-policy-joint_audit",
+        "conditions": [
+          {
+            "type": "scoreAtLeast",
+            "key": "evidence",
+            "value": 60
+          },
+          {
+            "type": "flagEquals",
+            "key": "joint_review",
+            "value": true
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-policy-leave_office",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "sacrifice",
+            "value": true
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-policy-silk_account",
+        "conditions": [
+          {
+            "type": "scoreAtLeast",
+            "key": "reform",
+            "value": 70
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "treasury",
+            "value": 40
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-policy-unfinished",
+        "conditions": []
+      }
+    ],
+    "randomRoutes": []
+  },
+  "startEventId": "mulberry-policy-order",
+  "dimensions": [
+    {
+      "id": "grain",
+      "label": "粮食保障",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 50,
+      "visible": true
+    },
+    {
+      "id": "treasury",
+      "label": "可调银款",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 45,
+      "visible": true
+    },
+    {
+      "id": "authority",
+      "label": "官场信用",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 55,
+      "visible": true
+    },
+    {
+      "id": "trust",
+      "label": "民间信任",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 40,
+      "visible": true
+    },
+    {
+      "id": "reform",
+      "label": "施政进度",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 20,
+      "visible": true
+    },
+    {
+      "id": "evidence",
+      "label": "证据完整",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "care",
+      "label": "护生之心",
+      "minimum": -20,
+      "maximum": 20,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "courage",
+      "label": "担责之勇",
+      "minimum": -20,
+      "maximum": 20,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "craft",
+      "label": "周旋之术",
+      "minimum": -20,
+      "maximum": 20,
+      "initialValue": 0,
+      "visible": false
+    }
+  ],
+  "archetypes": [
+    {
+      "id": "keeper",
+      "name": "守灯人",
+      "description": "你先看见具体的人，再设法替他们留下可以延续的生活。",
+      "weights": {
+        "care": 10,
+        "courage": 4,
+        "craft": 2
+      }
+    },
+    {
+      "id": "witness",
+      "name": "留证者",
+      "description": "你相信一纸能够核对的凭据，胜过当下最响亮的保证。",
+      "weights": {
+        "care": 4,
+        "courage": 10,
+        "craft": 2
+      }
+    },
+    {
+      "id": "broker",
+      "name": "摆渡人",
+      "description": "你在不能尽如人意的条件里周旋，争取下一次选择的余地。",
+      "weights": {
+        "care": 3,
+        "courage": 2,
+        "craft": 10
+      }
+    },
+    {
+      "id": "survivor",
+      "name": "过关人",
+      "description": "你首先设法渡过眼前这一关，也必须面对被推迟的代价。",
+      "weights": {
+        "care": 0,
+        "courage": 0,
+        "craft": 1
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "mulberry-policy-order",
+      "chapter": 1,
+      "title": "二月，先落下的一枚印",
+      "description": "布政司送来督办文书：临溪县要增报桑亩，并在秋季解足一笔银。你是受命督办的陆承简。旧桑园的丝价确实可观，但新栽的桑苗不能立刻供足蚕叶。案上没有过渡粮款，只有一句“责成有司妥办”。你必须先决定，什么才算办成。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-policy-order-floor",
+          "type": "selectOption",
+          "text": "在条款里先划口粮底线，缺额由督办另筹",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "food_floor",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-reports",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-order-quota",
+          "type": "selectOption",
+          "text": "按各县亩数分派任务，以秋季解银考成",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-reports",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-order-pilot",
+          "type": "selectOption",
+          "text": "只准两处试办，向上争取一季展限",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-reports",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-policy-reports",
+      "chapter": 2,
+      "title": "三月，彼此不认的数字",
+      "description": "知县周守衡报“仓可支夏”，粮商却说城中米价已涨。顾廷章的商馆愿预缴一笔银，但要求秋前兑成收茧的权利。三份文书各有印信，没有一份告诉你：被改掉的那块稻田，今年由谁供粮。随员问，此行先往县仓，还是商馆？",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-policy-reports-inspect",
+          "type": "selectOption",
+          "text": "带人逐仓核粮，把行程让给未经修饰的实数",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-field",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-reports-guarantee",
+          "type": "selectOption",
+          "text": "召商人签保价与到粮两份保结",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "merchant_guarantee",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-trade",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-reports-certify",
+          "type": "selectOption",
+          "text": "先凭知县具结办事，要求限期补齐原册",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": -1
+            },
+            {
+              "type": "setFlag",
+              "key": "paper_trust",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-trade",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-policy-field",
+      "chapter": 3,
+      "title": "县仓门外的一只空碗",
+      "description": "仓门内的积谷按册堆齐，门外的叶青娘却捧着一只空碗。她不是来讨一碗现饭，而是来问借桑本银时许下的粮何日到户。仓吏说这不归仓里管，商人说应先验田。你终于看见，三个部门各守着一句正确的话，把同一个人留在门外。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-policy-field-petition",
+          "type": "selectOption",
+          "text": "收下原契和诉词，追查过渡粮款的经手人",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "petition",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-flood",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-field-relief",
+          "type": "selectOption",
+          "text": "先拨急粮到户，留随员继续核册",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-flood",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-field-return",
+          "type": "selectOption",
+          "text": "让县里依程序收状，自己按期继续验亩",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-flood",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-policy-trade",
+      "chapter": 3,
+      "title": "商馆夜里的一幅空绢",
+      "description": "顾廷章铺开一幅尚未染色的绢，说生意也怕官文改口：他先垫银，就要有稳定货源。你问新桑何时成叶，他答本季靠旧桑园收叶，明年才谈扩产；眼前所谓新政收益，大半还是对来年的预支。门外运粮船等着一道免缓检验的批文。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-policy-trade-linked",
+          "type": "selectOption",
+          "text": "把保价、到粮期限与违约追偿写成连带条款",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 1
+            },
+            {
+              "type": "setFlag",
+              "key": "joint_guarantee",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-flood",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-trade-advance",
+          "type": "selectOption",
+          "text": "用明年丝货作担保，先收本季预缴银",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "forward_sale",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-flood",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-trade-contracts",
+          "type": "selectOption",
+          "text": "不收私下谢仪，只取原始契据逐项核验",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-flood",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-policy-flood",
+      "chapter": 4,
+      "title": "八月，石桥圩的雨",
+      "description": "秋汛压上石桥圩。县里求拨堤工，商馆求保丝栈，邻县也说余粮有限。筹来的钱只够先办一件大事。守住稻圩会误解银，守住货路能留住商人，却不能保证粮马上运来。周守衡在急递背面添了一行：请大人明示，先保什么。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-policy-flood-paddy",
+          "type": "selectOption",
+          "text": "先保稻圩，挪督办经费调运急粮",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -18
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "food_floor",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-testimony",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-flood-warehouse",
+          "type": "selectOption",
+          "text": "先保大路与丝栈，粮请邻县协济",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -18
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-testimony",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-flood-split",
+          "type": "selectOption",
+          "text": "分列堤工与粮运，公开各县借还数",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-testimony",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-policy-testimony",
+      "chapter": 5,
+      "title": "九月，同一笔银的三种说法",
+      "description": "书吏、商人和农户对上了同一张领银单。书吏称银已抵旧欠，商人称农户自愿预卖，农户说签押前没人念过最后两行。承认这份缺口，也意味着承认督办最初的考成办法催出了它。随员劝你只办几个经手人，别把自己的文书也放上案。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-policy-testimony-open",
+          "type": "selectOption",
+          "text": "封存双份原册，让三方当面核对",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "joint_review",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-delivery",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-testimony-silver",
+          "type": "selectOption",
+          "text": "先补齐秋解银，账目留到结案后再清",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-delivery",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-testimony-settle",
+          "type": "selectOption",
+          "text": "按经手差错私下赔补，暂不扩大问责",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "quiet_settlement",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-delivery",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-policy-delivery",
+      "chapter": 6,
+      "title": "十月，交割之前",
+      "description": "茧价没有如预想上涨，外粮也晚了一程。顾廷章提出先收足桑课，冬前再放平价粮；周守衡送来按户签过的缺粮册，请求分期解银。两份请求都合乎各自的生计。离上报只剩三日，你得决定谁先拿到兑现的东西。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-policy-delivery-food",
+          "type": "selectOption",
+          "text": "缺额分期，先验口粮是否真正到户",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-seal",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-delivery-tax",
+          "type": "selectOption",
+          "text": "先收足本季桑课，以冬粮承诺安抚地方",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": -18
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-seal",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-policy-delivery-deposit",
+          "type": "selectOption",
+          "text": "依保结收保证银，停下尚未签押的改田",
+          "conditions": [
+            {
+              "type": "flagEquals",
+              "key": "merchant_guarantee",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-policy-seal",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-policy-seal",
+      "chapter": 7,
+      "title": "封册之前的一处留白",
+      "description": "誊清的秋册留着最后一行。你的名字会落在成数之下，也可能落在缺额之下。窗外开始落霜，明年桑树能长几片叶，还没有人知道。你能决定的，是下一位接手的人将读到什么，以及谁必须为这册纸负责。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-policy-seal-truth",
+          "type": "selectOption",
+          "text": "连保粮条款、真实缺额与自己的签批一并上报",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "grain",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 1
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "public_report",
+              "value": true
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "mulberry-policy-seal-success",
+          "type": "selectOption",
+          "text": "只以桑亩与解银成数结案，欠粮列作来年事项",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "treasury",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "reform",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": -20
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "falsified",
+              "value": true
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "mulberry-policy-seal-responsibility",
+          "type": "selectOption",
+          "text": "以自己的考成作保，请另派人员复查全案",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "authority",
+              "value": -25
+            },
+            {
+              "type": "addScore",
+              "key": "evidence",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "trust",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 3
+            },
+            {
+              "type": "setFlag",
+              "key": "joint_review",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "key": "sacrifice",
+              "value": true
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "id": "mulberry-policy-empty_granary",
+      "title": "白绢上的饥荒",
+      "summary": "秋册的绢面平整，县里的粮路却断了。你的银数或许够交，米价却不肯照公文落下去。石桥圩有人把仅剩的农具挑到镇上，换一季未必够吃的粮。冬前复核时，差官终于问起当初那句“妥办”；没有人再能把它拆给别人回答。"
+    },
+    {
+      "id": "mulberry-policy-paper_success",
+      "title": "一纸遮天",
+      "summary": "完成的成数送入档房，缺粮被移进来年的借项。你保住了这一季的体面，有些经手人也因此保住位置。叶青娘的副契还在，只是暂时没有人愿意接。明春若桑叶不够、粮船再迟，今天留白的地方就会长成一个更大的数。"
+    },
+    {
+      "id": "mulberry-policy-grain_clause",
+      "title": "留粮成章",
+      "summary": "这次上报少了漂亮的成数，多了一项可以核验的保粮条款。钱并不宽裕，督办的考语也不好看，但明春哪些田先插稻、谁为到粮负责，终于写在同一张纸上。你离开临溪时，见人把稻种挂回屋梁。那不是百姓从此无忧的证明，只是来年仍有得种。"
+    },
+    {
+      "id": "mulberry-policy-joint_audit",
+      "title": "按印问责",
+      "summary": "三方的原册被并封，你最初签下的指标也附在案后。复查不会只追一个书吏或一个商人；你可能受罚，农户也未必马上得到足额赔补。但一笔银终于能沿经手人的名字往回找，不必再靠最弱的人证明自己没有领过不存在的粮。"
+    },
+    {
+      "id": "mulberry-policy-leave_office",
+      "title": "去位留案",
+      "summary": "你的差事被停了。临溪县还要过冬，接任者也可能嫌这份案卷麻烦。你把原契副本交到不同的人手里，知道交出去以后便不能支配它们的命运。船离石桥时，你没有等来送行的仪仗，只听见岸上有人核对一笔刚到的粮。"
+    },
+    {
+      "id": "mulberry-policy-silk_account",
+      "title": "桑色入账",
+      "summary": "这季解银终于凑齐，丝栈也留住了商路。上头认可你的周旋，临溪却比从前更仰赖外粮和保价契。你没有把所有田变成绝路，也没有消除这条路上的风险。真正的考验在下一次丝价下跌时：今天能够兑现的承诺，是否仍有人愿意认账。"
+    },
+    {
+      "id": "mulberry-policy-unfinished",
+      "title": "秋账未平",
+      "summary": "没有一张总表能够替你结清这一季。部分田留下了稻，部分银换成了展限，几户人家的旧欠仍在争议。你在案末列出每一笔未决事项和经手人，准许后来者质疑。这算不上大功，却让“暂缓”第一次有了期限，也有了可以追问的名字。"
+    }
+  ]
+}

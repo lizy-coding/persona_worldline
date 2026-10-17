@@ -1,0 +1,1434 @@
+{
+  "schemaVersion": 3,
+  "packId": "mulberry-household",
+  "version": "1.0.0",
+  "title": "桑田秋账·承受者",
+  "summary": "被执行层：一家人的粮、债、耕作权与选择余地。",
+  "intro": {
+    "title": "序章：佃户叶青娘",
+    "body": "春天的雨还没有下透，里正已带着桑苗和借银契来到门前。你是叶青娘，租着石桥圩两亩田。你不参与拟定政令，却要决定哪一袋谷留种、哪一笔银能领、哪一枚手印会把全家带进来年。\n\n本线独立推演七次关键抉择。桑苗不会一夜成叶，借银也不是白得的收入。你能争取的，先是让家人活过这一季，再为下一次选择留一点余地。",
+    "buttonText": "翻开这一季的账"
+  },
+  "flowRules": {
+    "minimumChoiceCount": 7,
+    "maximumChoiceCount": 7,
+    "initialFlags": {
+      "kept_paddy": false,
+      "advance": false,
+      "receipt": false,
+      "departed": false,
+      "trained": false,
+      "cooperative": false,
+      "bound": false,
+      "petition": false,
+      "testified": false
+    },
+    "endingRules": [
+      {
+        "endingId": "mulberry-household-cold_hearth",
+        "conditions": [
+          {
+            "type": "any",
+            "conditions": [
+              {
+                "type": "scoreAtMost",
+                "key": "food",
+                "value": 22
+              },
+              {
+                "type": "scoreAtMost",
+                "key": "family",
+                "value": 20
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-household-long_contract",
+        "conditions": [
+          {
+            "type": "scoreAtLeast",
+            "key": "debt",
+            "value": 80
+          },
+          {
+            "type": "scoreAtMost",
+            "key": "land",
+            "value": 35
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-household-name_on_paper",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "receipt",
+            "value": true
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "proof",
+            "value": 55
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "bonds",
+            "value": 45
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "family",
+            "value": 35
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-household-half_field",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "kept_paddy",
+            "value": true
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "food",
+            "value": 50
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "land",
+            "value": 40
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-household-loom_year",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "trained",
+            "value": true
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "family",
+            "value": 45
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "food",
+            "value": 25
+          },
+          {
+            "type": "scoreAtMost",
+            "key": "debt",
+            "value": 65
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-household-leave_bridge",
+        "conditions": [
+          {
+            "type": "flagEquals",
+            "key": "departed",
+            "value": true
+          },
+          {
+            "type": "scoreAtLeast",
+            "key": "family",
+            "value": 40
+          }
+        ]
+      },
+      {
+        "endingId": "mulberry-household-renew_lamp",
+        "conditions": []
+      }
+    ],
+    "randomRoutes": []
+  },
+  "startEventId": "mulberry-household-seed",
+  "dimensions": [
+    {
+      "id": "food",
+      "label": "家中口粮",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 45,
+      "visible": true
+    },
+    {
+      "id": "debt",
+      "label": "债务负担",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 20,
+      "visible": true
+    },
+    {
+      "id": "family",
+      "label": "家人安稳",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 60,
+      "visible": true
+    },
+    {
+      "id": "bonds",
+      "label": "乡里互助",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 30,
+      "visible": true
+    },
+    {
+      "id": "land",
+      "label": "耕作自主",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 50,
+      "visible": true
+    },
+    {
+      "id": "proof",
+      "label": "契据凭证",
+      "minimum": 0,
+      "maximum": 100,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "care",
+      "label": "护生之心",
+      "minimum": -20,
+      "maximum": 20,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "courage",
+      "label": "担责之勇",
+      "minimum": -20,
+      "maximum": 20,
+      "initialValue": 0,
+      "visible": false
+    },
+    {
+      "id": "craft",
+      "label": "周旋之术",
+      "minimum": -20,
+      "maximum": 20,
+      "initialValue": 0,
+      "visible": false
+    }
+  ],
+  "archetypes": [
+    {
+      "id": "keeper",
+      "name": "守灯人",
+      "description": "你先看见具体的人，再设法替他们留下可以延续的生活。",
+      "weights": {
+        "care": 10,
+        "courage": 4,
+        "craft": 2
+      }
+    },
+    {
+      "id": "witness",
+      "name": "留证者",
+      "description": "你相信一纸能够核对的凭据，胜过当下最响亮的保证。",
+      "weights": {
+        "care": 4,
+        "courage": 10,
+        "craft": 2
+      }
+    },
+    {
+      "id": "broker",
+      "name": "摆渡人",
+      "description": "你在不能尽如人意的条件里周旋，争取下一次选择的余地。",
+      "weights": {
+        "care": 3,
+        "courage": 2,
+        "craft": 10
+      }
+    },
+    {
+      "id": "survivor",
+      "name": "过关人",
+      "description": "你首先设法渡过眼前这一关，也必须面对被推迟的代价。",
+      "weights": {
+        "care": 0,
+        "courage": 0,
+        "craft": 1
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "mulberry-household-seed",
+      "chapter": 1,
+      "title": "一袋未落地的稻种",
+      "description": "你是石桥圩的佃户叶青娘。屋梁上吊着留种谷，灶边还有老人和两个孩子。改桑的消息来时，丈夫正在补漏船。你知道新桑当年不能养足一季蚕，也知道收下桑本银，今晚便能添米。里正来催时，稻秧已不能再等。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-household-seed-half",
+          "type": "selectOption",
+          "text": "留半亩插稻，只拿余田试种桑",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "kept_paddy",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-paper",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-seed-all",
+          "type": "selectOption",
+          "text": "领桑本银，将两亩一并交去改桑",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            },
+            {
+              "type": "setFlag",
+              "key": "advance",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-paper",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-seed-ask",
+          "type": "selectOption",
+          "text": "先找识字的人问清契纸，宁可晚几日",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "proof",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -3
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-paper",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-household-paper",
+      "chapter": 2,
+      "title": "门槛上的契纸",
+      "description": "契纸有四个名字，只有你不识字。经手人说，画押不过是证明领过银；旁边的织工却说末尾还有抵债条款。你问能否留一份，对方说向来没有这个规矩。孩子站在门内，盯着那串已经摆在凳上的铜钱。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-household-paper-copy",
+          "type": "selectOption",
+          "text": "请人逐条念明，留一张有经手印的副纸",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "proof",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -3
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "receipt",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-old_mulberry",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-paper-sign",
+          "type": "selectOption",
+          "text": "按印领银，再去替大户照看旧桑园",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "advance",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-old_mulberry",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-paper-loom",
+          "type": "selectOption",
+          "text": "不借桑本，带家人去镇上找短期织工",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "departed",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "key": "trained",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-loom",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-household-old_mulberry",
+      "chapter": 3,
+      "title": "老桑下的第一篮叶",
+      "description": "新苗的叶还不够，养蚕得向旧桑园租叶。顾家的管事愿赊蚕种，也愿再借一笔银。他说养成一季就能周转，邻户却说去年蚕病时，赔进去的先是田租。你把第一篮桑叶放上秤，发现每一片叶都已经有了价钱。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-household-old_mulberry-share",
+          "type": "selectOption",
+          "text": "与两户合租旧桑叶，先留足口粮再买蚕种",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "cooperative",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-rain",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-old_mulberry-more",
+          "type": "selectOption",
+          "text": "多赊一批蚕种，赌秋前能一并清债",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-rain",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-old_mulberry-work",
+          "type": "selectOption",
+          "text": "替人采叶缫丝换米，不再追加借银",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "trained",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-rain",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-household-loom",
+      "chapter": 3,
+      "title": "镇上织机旁的位置",
+      "description": "机房里没有你家的田，却有按日算的工钱。掌柜愿意教你理丝，条件是农忙也不能随便回去。丈夫想一次领半年预支，省得再求粮；你看着孩子困得抬不起的眼，想知道这份安稳会占去谁的日子。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-household-loom-short",
+          "type": "selectOption",
+          "text": "签短工契，约清工钱和换班日期",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "proof",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "receipt",
+              "value": true
+            },
+            {
+              "type": "setFlag",
+              "key": "trained",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-rain",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-loom-bound",
+          "type": "selectOption",
+          "text": "领半年预支，将家里人都记作帮工",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 30
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -20
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            },
+            {
+              "type": "setFlag",
+              "key": "bound",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-rain",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-loom-split",
+          "type": "selectOption",
+          "text": "自己留镇做工，让家人回去守住余田",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "kept_paddy",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-rain",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-household-rain",
+      "chapter": 4,
+      "title": "雨夜，先抬哪一只筐",
+      "description": "石桥圩的锣敲起来时，屋里有装蚕的匾，也有留给家人的米缸。抬一样就得暂时放下一样。远处大户的堤上举着灯，说来帮工就给粮；邻家的孩子还在你门外哭。雨没有等你想清楚，先漫过了门槛。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-household-rain-family",
+          "type": "selectOption",
+          "text": "先撤家人，与邻户把种粮一起抬上堤",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-rice",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-rain-silkworms",
+          "type": "selectOption",
+          "text": "先守住桑叶和蚕匾，盼邻人来接家人",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -12
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-rice",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-rain-labor",
+          "type": "selectOption",
+          "text": "去帮大户护堤换粮，托邻家照看老小",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-rice",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-household-rice",
+      "chapter": 5,
+      "title": "米铺前的长队",
+      "description": "米价又涨了。领粮簿上有你家的名字，经手人却说还要等复核。原债主愿再赊半斗米，条件是拿来年的工钱或田份抵保。前面的人转过头来问，大家要不要一起去县仓。你知道人多未必就有粮，但独自留下也未必更安全。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-household-rice-together",
+          "type": "selectOption",
+          "text": "与邻户核对领粮簿，一起去求开仓",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "proof",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "petition",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-questions",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-rice-borrow",
+          "type": "selectOption",
+          "text": "再赊一笔米，拿来年工钱和田份作保",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 12
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-questions",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-rice-tools",
+          "type": "selectOption",
+          "text": "卖掉备用农具，先让老小吃饱",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 18
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 8
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 2
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-questions",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-household-questions",
+      "chapter": 6,
+      "title": "来问话的人",
+      "description": "县里来人问桑本银究竟领了多少。你若说出契纸的事，可能要再走一趟县衙，也可能得罪明年仍要打交道的里正。邻户有人愿同去，有人悄悄退了。来人保证只是核账，你想起自己上一次也是听着“只是”两个字落的印。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-household-questions-original",
+          "type": "selectOption",
+          "text": "拿副契作证，要求留副本、不扣原件",
+          "conditions": [
+            {
+              "type": "flagEquals",
+              "key": "receipt",
+              "value": true
+            }
+          ],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "proof",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "testified",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-fingerprint",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-questions-own",
+          "type": "selectOption",
+          "text": "只说清自己领过的银，不替旁人担保",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "proof",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "care",
+              "value": 1
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-fingerprint",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        },
+        {
+          "id": "mulberry-household-questions-joint",
+          "type": "selectOption",
+          "text": "与邻户合交账目，每家各留一份花押",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "proof",
+              "value": 20
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -8
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "testified",
+              "value": true
+            }
+          ],
+          "routes": [
+            {
+              "eventId": "mulberry-household-fingerprint",
+              "weight": 1,
+              "conditions": []
+            }
+          ],
+          "endsStory": false
+        }
+      ]
+    },
+    {
+      "id": "mulberry-household-fingerprint",
+      "chapter": 7,
+      "title": "秋后，那枚手印",
+      "description": "秋验过后，契纸又递到了你面前。有些欠数改了，有些人换了说法，桑苗还立在田边。桌上照旧摆着现米：按印便能拿走。你这一次知道，纸上写的是今年的账，也可能是明年全家能不能再自己做主的日子。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "mulberry-household-fingerprint-verify",
+          "type": "selectOption",
+          "text": "只认核实过的欠额，写明来年口粮再按印",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "proof",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": 5
+            },
+            {
+              "type": "addScore",
+              "key": "courage",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "receipt",
+              "value": true
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "mulberry-household-fingerprint-renew",
+          "type": "selectOption",
+          "text": "换一袋现米，签下续借与长工合契",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": 15
+            },
+            {
+              "type": "addScore",
+              "key": "debt",
+              "value": 25
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": -20
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 1
+            },
+            {
+              "type": "setFlag",
+              "key": "bound",
+              "value": true
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        },
+        {
+          "id": "mulberry-household-fingerprint-leave",
+          "type": "selectOption",
+          "text": "收好余下的契纸，带家人另寻生计",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "food",
+              "value": -5
+            },
+            {
+              "type": "addScore",
+              "key": "family",
+              "value": 10
+            },
+            {
+              "type": "addScore",
+              "key": "land",
+              "value": -15
+            },
+            {
+              "type": "addScore",
+              "key": "bonds",
+              "value": -10
+            },
+            {
+              "type": "addScore",
+              "key": "craft",
+              "value": 2
+            },
+            {
+              "type": "setFlag",
+              "key": "departed",
+              "value": true
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "id": "mulberry-household-cold_hearth",
+      "title": "冷灶",
+      "summary": "灶里最后一点火熄下去时，家里还有没有结清的账。桑叶、借银和作证都曾像一条路，最后却没能及时换成米。你得带着老小去更远的地方求生，来不及等县册改成正确的数。纸上的欠额仍在，屋梁上的种谷却已经取下了。"
+    },
+    {
+      "id": "mulberry-household-long_contract",
+      "title": "长契短夜",
+      "summary": "这晚终于有米下锅，代价是来年的工期与田份又抵出一截。你不是不知道契长，只是孩子不能等到下一次复核。以后天不亮便要赶去做工，桑树长多少叶都未必归自己支配。你把剩下的纸包好，仍想着有一日能把欠数一笔笔划掉。"
+    },
+    {
+      "id": "mulberry-household-name_on_paper",
+      "title": "一纸有名",
+      "summary": "副契上的名字被正式核过，邻户也各留了一份花押。你没有因此免去所有债，也没有从此不必向人借粮，但欠谁多少、该谁赔什么，终于不再只凭经手人的一句话。夜里你教孩子认纸上的自家名字，第二天照旧要下地，心里却多了一种可以慢慢学会的本事。"
+    },
+    {
+      "id": "mulberry-household-half_field",
+      "title": "半亩留青",
+      "summary": "留下的半亩稻没有让你家富起来，却让几次必须画押的时刻，多出一点可以等的余地。圩上有桑，也仍有稻，租约还需再谈，来年的水也还没来。你把种谷重新挂上梁，知道守住它靠的不只是一次勇敢，还靠邻人的一筐米和自己肯算清的每笔小账。"
+    },
+    {
+      "id": "mulberry-household-loom_year",
+      "title": "织机旁的来年",
+      "summary": "你学会理丝，也约清了工钱和换班。日子并不轻松，家里比从前更依赖镇上的机房，却暂时没有把全年的自由都抵给一份长契。你把一部分工钱换米，一部分留作往返路费。田与织机之间，家人仍要商量谁去谁留；这回商量还没有被别人替你结束。"
+    },
+    {
+      "id": "mulberry-household-leave_bridge",
+      "title": "走出石桥",
+      "summary": "你带着家人离开圩口，行李里有几张契纸和一袋不多的粮。离乡不是一张成功的状纸，也不是一道可以轻易判错的选择。你只是决定不把全家继续押在同一个承诺上。船过桥时，孩子回头找自家的屋顶；你记下岸边的路，想着还要为下一个落脚处重新打听。"
+    },
+    {
+      "id": "mulberry-household-renew_lamp",
+      "title": "灯下续契",
+      "summary": "账还没有算平，你也没有失去所有能够周旋的东西。灯下的契纸多了几处你认识的字，邻家有人肯替你核一遍，来年的口粮仍须一斗一斗筹。你把印泥推远一点，请经手人把最后两行再念一遍。明日未必更容易，但这一次，你没有急着让夜晚替自己作主。"
+    }
+  ]
+}

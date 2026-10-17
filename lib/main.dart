@@ -16,6 +16,9 @@ final contentRepositoryProvider = Provider<ContentPackRepository>(
   (ref) => const AssetContentPackRepository({
     'silent-tide': 'assets/content/core_pack.json',
     'santi': 'assets/content/santi.json',
+    'mulberry-policy': 'assets/content/mulberry_policy.json',
+    'mulberry-county': 'assets/content/mulberry_county.json',
+    'mulberry-household': 'assets/content/mulberry_household.json',
   }),
 );
 final gameProvider = AsyncNotifierProvider<GameNotifier, GameSession?>(
@@ -166,8 +169,8 @@ class StoryLibraryPage extends StatelessWidget {
   final Future<void> Function(String) onSelect;
 
   @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget build(BuildContext context) => ListView(
+    padding: EdgeInsets.zero,
     children: [
       const SizedBox(height: 24),
       Text('选择一条世界线', style: Theme.of(context).textTheme.headlineMedium),
