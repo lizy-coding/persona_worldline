@@ -138,16 +138,46 @@ generic_workflow_engine empty_future_pages empty_future_services
 
 `CHANGE-003 MUST_NOT` commit `build/`, `.dart_tool/`, logs, secrets, IDE state, or generated caches.
 
+## REMOTE MAINTENANCE
+
+- Canonical repository: https://github.com/lizy-coding/persona_worldline. Daily development uses a focused branch and a pull request targeting `master`.
+- Start by inspecting the branch, HEAD, Git status, remote baseline, this guide, and the files named by the task. Preserve existing dirty work and expand reads through concrete imports or contracts.
+- Project workflows must run from any checkout path. They must not require personal skill libraries, local assistant installations, login state, or neighboring repositories.
+- Keep personal assistant plans, task receipts, private skills, credentials, and runtime state local. The committed project documentation is sufficient for maintenance.
+- Git actions follow the current task's authorization. Do not ask again for already authorized actions. Without authorization, do not commit, push, merge, publish, or change repository settings. Never force-push over another contributor's work.
+- Pushing a feature branch or opening a PR does not deploy the site. Merging into `master` triggers the existing Pages deployment; merging and deployment require the applicable task authorization.
+
 ## REQUIRED CHECKS
 
-```bash
-dart format --output=none --set-exit-if-changed lib test
-flutter analyze
-flutter test
-```
-
-Trigger: Web setup | assets | dependencies
+The verified toolchain is Flutter 3.47.2 / Dart 3.13.2. CI and Pages use the same Flutter version. Resolve the committed lockfile through the standard pub.dev registry.
 
 ```bash
-flutter build web
+bash tool/check.sh
 ```
+
+This installs locked dependencies, checks formatting in `lib`, `test`, and `tool`, runs static analysis and tests, and validates every story pack plus the documentation template. Do not skip failures or replace a failed validator with `|| true`.
+
+For Web, asset, dependency, or deployment changes also run:
+
+```bash
+flutter build web --release
+```
+
+PR CI always checks the Web build. For story or UI changes, record the tested path, viewport, save/reload behavior, and screenshots when useful. Automated build evidence and browser interaction evidence are separate.
+
+For documentation-only work, check changed Markdown, referenced paths, and `git diff --check`; rely on PR CI for the unchanged application gate unless a concrete concern needs local reproduction.
+
+## ADD STORY WORKFLOW
+
+Follow `docs/ADDING_STORIES.md`. The reusable starter is `docs/templates/story_pack.json`, outside the bundled game assets.
+
+1. Copy the template into `assets/content/<pack>.json`, fill in the story contract, and validate it with `dart run tool/validate_pack.dart <path>`.
+2. Register business metadata in `lib/story_catalog.dart` and the asset mapping in `lib/main.dart`. The existing `assets/content/` declaration covers new files.
+3. Add parsing, seeded-path, and ending-resolution coverage; do not add story-specific logic to the engine or widgets.
+4. Run the shared gate and Web build, then verify the requested story flow in the browser.
+
+## CODE REVIEW RULES
+
+- New content must preserve typed schema validation, deterministic saved random state, bounded choice counts, and an unconditional ending fallback.
+- Story selection and persistence must remain isolated by pack ID and content version. UI and storage adapters must not duplicate game rules.
+- Reject prerequisites on private local Agent files or personal directory layouts. Validation failures must propagate; historical task receipts are not current evidence.

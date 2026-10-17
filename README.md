@@ -22,7 +22,7 @@
 
 ### 环境要求
 
-- Flutter SDK（项目当前要求 Dart `^3.11.5`）
+- 已验证工具链：Flutter `3.47.2` / Dart `3.13.2`
 - 支持 Flutter Web 的浏览器
 
 确认环境可用：
@@ -51,14 +51,13 @@ flutter build web
 提交代码前建议运行：
 
 ```bash
-dart format --output=none --set-exit-if-changed lib test
-flutter analyze
-flutter test
+bash tool/check.sh
 ```
 
 ## 一键发布到 GitHub Pages
 
-项目包含 `.github/workflows/deploy-pages.yml`：推送 `master` 时自动校验并发布，
+项目包含 `.github/workflows/ci.yml`：面向 `master` 的 PR 先检查格式、分析、测试、内容包和 Web 构建。
+`.github/workflows/deploy-pages.yml` 在推送 `master` 时自动校验并发布，
 也可在 GitHub Actions 页面通过 `Run workflow` 手动发布。首次使用需在仓库
 `Settings → Pages` 中将 Source 设置为 `GitHub Actions`。
 
@@ -117,3 +116,13 @@ AGENTS.md                      后续开发必须遵守的项目根级规则
 ## 版本控制约定
 
 仓库只保留源码、剧情资产、测试、依赖锁文件和必要的项目配置。构建产物、依赖缓存、IDE 工作区、本地环境文件、日志、覆盖率及密钥文件均由 `.gitignore` 排除。请勿把真实凭据写入仓库；如后续需要环境变量，可提交不含敏感值的 `.env.example`。
+
+## 远端开发与新增故事
+
+后续日常维护通过 GitHub 分支和 PR 跟进；本地 checkout 用于复现与浏览器验收。
+
+- [远端维护说明](docs/REMOTE_MAINTENANCE.md)：工具链、检查入口、PR 和发布边界。
+- [新增故事指南](docs/ADDING_STORIES.md)：可验证的 JSON 模板、注册步骤与测试要求。
+- `tool/validate_pack.dart`：单个内容包的命令行校验工具。
+
+项目规则不依赖个人技能库或本地 Agent 状态。

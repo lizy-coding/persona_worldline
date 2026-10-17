@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 3,
+  "packId": "your-pack-id",
+  "version": "1.0.0",
+  "title": "你的故事标题",
+  "summary": "一句话故事简介。",
+  "intro": {
+    "title": "序章标题",
+    "body": "故事背景介绍文字，可以多行。告诉玩家他们是谁、面临什么局面。",
+    "buttonText": "开始"
+  },
+  "flowRules": {
+    "minimumChoiceCount": 1,
+    "maximumChoiceCount": 1,
+    "initialFlags": {},
+    "endingRules": [
+      {
+        "endingId": "default_ending",
+        "conditions": []
+      }
+    ],
+    "randomRoutes": []
+  },
+  "startEventId": "event_1",
+  "dimensions": [
+    {
+      "id": "karma",
+      "label": "业力",
+      "minimum": -10,
+      "maximum": 10,
+      "initialValue": 0,
+      "visible": true
+    }
+  ],
+  "archetypes": [
+    {
+      "id": "neutral",
+      "name": "旁观者",
+      "description": "你选择保持中立，不偏不倚。",
+      "weights": {
+        "karma": 0
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "event_1",
+      "chapter": 1,
+      "title": "第一个抉择",
+      "description": "你需要做出第一个选择。",
+      "conditions": [],
+      "actions": [
+        {
+          "id": "action_1",
+          "type": "selectOption",
+          "text": "做出选择，结束故事",
+          "conditions": [],
+          "effects": [
+            {
+              "type": "addScore",
+              "key": "karma",
+              "value": 1
+            }
+          ],
+          "routes": [],
+          "endsStory": true
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "id": "default_ending",
+      "title": "故事的开始",
+      "summary": "这只是个开始，你的故事远未结束。"
+    }
+  ]
+}
